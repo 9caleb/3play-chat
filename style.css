@@ -20,62 +20,42 @@ body {
 .logo-wrap {
   display: flex;
   justify-content: center;
-  margin-bottom: 30px;
+  margin-bottom: 25px;
   perspective: 1000px;
 }
 
 .logo-wrap img {
   width: 340px;
   animation: spin3d 6s linear infinite, glow 3s ease-in-out infinite;
-  transform-style: preserve-3d;
 }
 
 @keyframes spin3d {
   from { transform: rotateY(0deg); }
-  to   { transform: rotateY(360deg); }
+  to { transform: rotateY(360deg); }
 }
 
 @keyframes glow {
-  0%,100% {
-    filter: drop-shadow(0 0 20px rgba(120,200,255,0.4))
-            drop-shadow(0 0 40px rgba(120,200,255,0.3));
-  }
-  50% {
-    filter: drop-shadow(0 0 35px rgba(120,200,255,0.8))
-            drop-shadow(0 0 70px rgba(120,200,255,0.6));
-  }
+  0%,100% { filter: drop-shadow(0 0 20px #4da6ff); }
+  50% { filter: drop-shadow(0 0 45px #4da6ff); }
 }
 
-.center-group {
-  text-align: center;
-}
-
-.center-group h1 {
-  font-size: 34px;
-  margin-bottom: 20px;
+.start-left {
+  text-align: left;
+  margin-bottom: 15px;
 }
 
 #qr {
   width: 360px;
-  height: 360px;
-  margin: 0 auto;
+  display: block;
+  margin: 0 auto 15px;
 }
 
-/* RULES */
 .rules {
-  margin-top: 25px;
   font-size: 14px;
   color: #ccc;
 }
 
-.rules p {
-  margin: 6px 0;
-}
-
-.rules .enjoy {
-  margin-top: 12px;
-  font-weight: bold;
-}
+.rules p { margin: 6px 0; }
 
 /* RIGHT */
 .right {
@@ -92,82 +72,99 @@ body {
 
 .msg {
   font-size: 24px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
   position: relative;
 }
 
 .msg .user {
   color: #4da6ff;
-  margin-right: 8px;
+  margin-right: 6px;
 }
 
 .msg .delete {
   position: absolute;
   right: 0;
-  top: 0;
+  color: red;
   cursor: pointer;
-  color: #ff4d4d;
 }
 
 /* INPUT */
 .input-area {
   border-top: 1px solid #222;
   padding: 20px;
-  display: flex;
-  gap: 10px;
 }
 
 input, textarea {
+  width: 100%;
   background: #0f0f14;
   border: 1px solid #222;
   color: #fff;
   padding: 14px;
-  font-size: 16px;
+  font-size: 18px;
 }
 
 textarea {
-  flex: 1;
-  height: 110px;
+  height: 160px;
 }
 
-button {
-  background: #4da6ff;
-  border: none;
-  padding: 14px 20px;
-  font-weight: bold;
-  cursor: pointer;
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
 }
 
 #clearBtn {
-  background: #ff4d4d;
+  background: #c0392b;
+  color: #fff;
 }
 
-/* MOBILE */
+/* PROMO */
+#promoOverlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: #000;
+  z-index: 9999;
+}
+
+#promoOverlay.active {
+  display: flex;
+}
+
+.promo-left, .promo-right {
+  width: 50%;
+}
+
+.promo-left img, .promo-right img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ===== MOBILE FIX (重点) ===== */
 @media (max-width: 900px) {
   .layout {
     flex-direction: column;
+    height: auto;
   }
 
-  .right {
-    display: none;
-  }
-
+  /* 不再隐藏 right */
   .left {
     width: 100%;
     border: none;
   }
 
-  #qr {
+  .right {
+    width: 100%;
+  }
+
+  /* 只隐藏聊天，不隐藏输入 */
+  #chat {
     display: none;
   }
 
-  .center-group h1 {
-    text-align: left;
-  }
-
-  input, textarea {
-    width: 100%;
-    font-size: 18px;
+  #qr {
+    display: none;
   }
 }
 
