@@ -1,0 +1,184 @@
+body {
+  margin: 0;
+  background: #050508;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* LEFT */
+.left {
+  width: 40%;
+  padding: 40px;
+  border-right: 1px solid #222;
+}
+
+.logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+  perspective: 1000px;
+}
+
+.logo-wrap img {
+  width: 320px;
+  animation: spin3d 8s linear infinite, glow 4s ease-in-out infinite;
+  transform-style: preserve-3d;
+}
+
+@keyframes spin3d {
+  from { transform: rotateY(0deg) rotateX(10deg); }
+  to   { transform: rotateY(360deg) rotateX(10deg); }
+}
+
+@keyframes glow {
+  0%,100% {
+    filter: drop-shadow(0 0 14px rgba(120,200,255,0.4))
+            drop-shadow(0 0 32px rgba(120,200,255,0.2));
+  }
+  50% {
+    filter: drop-shadow(0 0 26px rgba(120,200,255,0.8))
+            drop-shadow(0 0 54px rgba(120,200,255,0.4));
+  }
+}
+
+.center-group {
+  text-align: center;
+  margin-top: -10px;
+}
+
+.center-group h1 {
+  font-size: 32px;
+  margin: 10px 0 10px;
+}
+
+#qr {
+  width: 320px;
+  height: 320px;
+  margin: 0 auto;
+}
+
+.rules {
+  margin-top: 20px;
+  font-size: 13px;
+  color: #ccc;
+}
+
+.rules p {
+  margin: 4px 0;
+}
+
+.rules .enjoy {
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+/* RIGHT */
+.right {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+}
+
+#chat {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.msg {
+  font-size: 24px;
+  margin-bottom: 16px;
+}
+
+.msg .user {
+  color: #4da6ff;
+  margin-right: 10px;
+}
+
+.input-area {
+  border-top: 1px solid #222;
+  padding: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+input, textarea {
+  background: #0f0f14;
+  border: 1px solid #222;
+  color: #fff;
+  padding: 12px;
+  font-size: 16px;
+}
+
+textarea {
+  flex: 1;
+  height: 120px;
+}
+
+button {
+  background: #4da6ff;
+  border: none;
+  padding: 14px 24px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* PROMO OVERLAY — 关键修复 */
+#promoOverlay {
+  display: none;              /* 只保留这一句 */
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: #000;
+}
+
+#promoOverlay.active {
+  display: flex;
+}
+
+.promo-left, .promo-right {
+  width: 50%;
+}
+
+.promo-left img,
+.promo-right img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* MOBILE */
+@media (max-width: 900px) {
+  .layout {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .left {
+    width: 100%;
+    border-right: none;
+  }
+
+  #qr,
+  #chat {
+    display: none;
+  }
+
+  .right {
+    width: 100%;
+  }
+
+  .input-area {
+    flex-direction: column;
+  }
+
+  textarea {
+    height: 160px;
+  }
+}
+

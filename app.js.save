@@ -1,0 +1,48 @@
+// Firebase configuration (converted for v8)
+var firebaseConfig = {
+  apiKey: "AIzaSyBMoeGpRpLb8Ooh47WIlKCrCPC7ocZ2ZUo",
+  authDomain: "play-chatbox.firebaseapp.com",
+  databaseURL: "https://play-chatbox-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "play-chatbox",
+  storageBucket: "play-chatbox.firebasestorage.app",
+  messagingSenderId: "822745508232",
+  appId: "1:822745508232:web:20b6baa7e4929668db723d",
+  measurementId: "G-4X6CD680J3"
+};
+
+// Initialize Firebase (v8 way)
+firebase.initializeApp(firebaseConfig);
+
+// Get database reference
+var database = firebase.database();
+var messagesRef = database.ref("messages");
+
+// Send message
+function sendMessage() {
+  var name = document.getElementById("name").value.trim();
+  var message = document.getElementById("message").value.trim();
+
+  if (!name || !message) return;
+
+  messagesRef.push({
+    name: name,
+    message: message
+  });
+
+  document.getElementById("message").value = "";
+}
+
+// Listen for new messages (real-time sync)
+messagesRef.limitToLast(100).on("child_added", function(snapshot) {
+  var data = snapshot.val();
+  var chat = document.getElementById("chat");
+
+  var div = document.createElement("div");
+  div.className = "msg";
+  div.innerHTML =
+    '<span class="name">' + data.name + '</span>: ' + data.message;
+
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
+});
+
