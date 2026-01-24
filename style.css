@@ -16,9 +16,13 @@ body {
   padding: 40px;
 }
 
+.logo-wrap {
+  text-align: center;
+}
+
 .logo-wrap img {
   width: 300px;
-  animation: spin 8s linear infinite;
+  animation: spin 7s linear infinite;
 }
 
 @keyframes spin {
@@ -27,17 +31,22 @@ body {
 }
 
 .title {
+  text-align: center;
   margin: 20px 0;
 }
 
 #qr {
+  display: block;
   width: 300px;
   height: 300px;
-  margin-bottom: 20px;
+  margin: 0 auto 20px;
+}
+
+.rules {
+  font-size: 14px;
 }
 
 .rules p {
-  font-size: 14px;
   margin: 6px 0;
 }
 
@@ -98,8 +107,8 @@ button {
   border: none;
 }
 
-/* PROMO (SCREEN ONLY) */
-#promo {
+/* SCREEN PROMO */
+#screenPromo {
   display: none;
   position: fixed;
   inset: 0;
@@ -107,11 +116,13 @@ button {
   display: flex;
 }
 
-.promo-left,
-.promo-right {
+.promo-dj,
+.promo-img {
   width: 50%;
-  background-size: cover;
+  background-size: contain;
+  background-repeat: no-repeat;
   background-position: center;
+  background-color: #000;
 }
 
 /* MOBILE */
@@ -135,12 +146,12 @@ button {
     flex-direction: column;
   }
 
-  input, textarea, button {
-    font-size: 18px;
-  }
-
   textarea {
     height: 140px;
+  }
+
+  button {
+    font-size: 18px;
   }
 }
 
