@@ -12,49 +12,48 @@ const ref = db.ref("messages");
 // ===== MODE =====
 const params = new URLSearchParams(window.location.search);
 const isScreen = params.has("screen");
-const isAdmin = params.has("admin");
+const isAdmin  = params.has("admin");
 
 // ===== ELEMENTS =====
-const chat = document.getElementById("chat");
+const chat      = document.getElementById("chat");
 const inputArea = document.getElementById("inputArea");
 const nameInput = document.getElementById("name");
-const msgInput = document.getElementById("message");
-const sendBtn = document.getElementById("sendBtn");
-const clearBtn = document.getElementById("clearBtn");
+const msgInput  = document.getElementById("message");
+const sendBtn   = document.getElementById("sendBtn");
+const clearBtn  = document.getElementById("clearBtn");
+const qr        = document.getElementById("qr");
+const layout    = document.querySelector(".layout");
 
-// ===== MOBILE NAME LOCK =====
+// ===== VISIBILITY RULES（不乱动） =====
+if (isScreen && inputArea) inputArea.style.display = "none";
+if (!isAdmin && clearBtn) clearBtn.style.display = "none";
+
+// ===== NAME LOCK（一次性） =====
 let lockedName = localStorage.getItem("lockedName");
 if (lockedName && nameInput) {
   nameInput.value = lockedName;
   nameInput.disabled = true;
   nameInput.placeholder = "Name locked";
+} else if (nameInput) {
+  nameInput.placeholder = "Enter your name (one time only)";
 }
 
-// ===== BAD WORD FILTER (BASIC) =====
-const badWords = [
-  "fuck","fuk","shit","bitch","asshole","cunt",
-  "nigger","niga","nigga","retard","pussy"
-];
-
+// ===== BAD WORD FILTER =====
+const badWords = ["fuck","bitch","cunt","nigger","nigga","pussy","babi","anjing","cibai"];
 function hasBadWord(text) {
   const t = text.toLowerCase();
   return badWords.some(w => t.includes(w));
 }
 
-// ===== COOLDOWN (30s) =====
-let lastSendTime = localStorage.getItem("lastSendTime") || 0;
+// ===== COOLDOWN =====
+let lastSend = localStorage.getItem("lastSend") || 0;
 
-// ===== MODE UI CONTROL =====
-if (isScreen && inputArea) inputArea.style.display = "none";
-if (!isScreen && !isAdmin && chat) chat.style.display = "none";
-if (isAdmin) document.getElementById("qr")?.remove();
-
-// ===== CHAT LISTENER =====
+// ===== CHAT LISTENER（admin ✕ 保留） =====
 ref.limitToLast(200).on("child_added", snap => {
-  const data = snap.val();
-  const key = snap.key;
-
   if (!chat) return;
+
+  const data = snap.val();
+  const key  = snap.key;
 
   const div = document.createElement("div");
   div.className = "msg";
@@ -66,7 +65,7 @@ ref.limitToLast(200).on("child_added", snap => {
   chat.scrollTop = chat.scrollHeight;
 });
 
-// ===== DELETE SINGLE (ADMIN) =====
+// ===== DELETE SINGLE（admin） =====
 document.addEventListener("click", e => {
   if (!isAdmin) return;
   if (e.target.classList.contains("delete")) {
@@ -80,41 +79,40 @@ document.addEventListener("click", e => {
 if (sendBtn && !isScreen) {
   sendBtn.onclick = () => {
     const now = Date.now();
-
     const name = nameInput.value.trim();
-    const msg = msgInput.value.trim();
+    const msg  = msgInput.value.trim();
 
     if (!name || !msg) return alert("Name and message required");
 
-    // name lock
+    // lock name
     if (!lockedName) {
-      localStorage.setItem("lockedName", name);
       lockedName = name;
+      localStorage.setItem("lockedName", name);
       nameInput.disabled = true;
     } else if (name !== lockedName) {
       nameInput.value = lockedName;
       return alert("Name can only be set once");
     }
 
-    // cooldown
-    if (now - lastSendTime < 30000) {
-      const wait = Math.ceil((30000 - (now - lastSendTime)) / 1000);
-      return alert(`Please wait ${wait}s before sending again`);
+    // cooldown 30s
+    if (now - lastSend < 30000) {
+      const wait = Math.ceil((30000 - (now - lastSend)) / 1000);
+      return alert(`Please wait ${wait}s`);
     }
 
     // bad words
     if (hasBadWord(msg)) {
-      return alert("Message contains inappropriate words");
+      return alert("Inappropriate words are not allowed");
     }
 
-    ref.push({ name, message: msg });
+    ref.push({ name: lockedName, message: msg });
     msgInput.value = "";
-    lastSendTime = now;
-    localStorage.setItem("lastSendTime", now);
+    lastSend = now;
+    localStorage.setItem("lastSend", now);
   };
 }
 
-// ===== CLEAR ALL (ADMIN) =====
+// ===== CLEAR ALL（admin，逻辑保留） =====
 if (clearBtn && isAdmin) {
   clearBtn.onclick = () => {
     if (confirm("Clear all messages?")) {
@@ -124,31 +122,51 @@ if (clearBtn && isAdmin) {
   };
 }
 
-// ===== PROMO LOOP (SCREEN ONLY) =====
-const promoOverlay = document.getElementById("promoOverlay");
-const promoImg = document.getElementById("promoImg");
-const promos = ["promo1.jpg","promo2.jpg","promo3.jpg","promo4.jpg"];
+// ===== SCREEN PROMO（最稳版本） =====
+if (isScreen) {
 
-if (isScreen && promoOverlay && promoImg) {
-  // first run quick so you SEE it
-  setTimeout(runPromo, 10000);
-  // then normal loop
-  setInterval(runPromo, 75000);
+  const promoWrap = document.createElement("div");
+  promoWrap.style.position = "fixed";
+  promoWrap.style.inset = "0";
+  promoWrap.style.background = "#000";
+  promoWrap.style.display = "none";
+  promoWrap.style.zIndex = "9999";
+  promoWrap.style.display = "flex";
 
-  function runPromo() {
-    let i = 0;
-    promoOverlay.classList.add("active");
-    promoImg.src = promos[i];
+  promoWrap.innerHTML = `
+    <div style="width:50%;display:flex;align-items:center;justify-content:center">
+      <img src="dj.jpg" style="max-width:90%;max-height:90%">
+    </div>
+    <div style="width:50%;display:flex;align-items:center;justify-content:center">
+      <img id="promoImg" src="promo1.jpg" style="max-width:90%;max-height:90%">
+    </div>
+  `;
 
-    const t = setInterval(() => {
-      i++;
-      if (i >= promos.length) {
-        clearInterval(t);
-        promoOverlay.classList.remove("active");
+  document.body.appendChild(promoWrap);
+
+  const promos = ["promo1.jpg","promo2.jpg","promo3.jpg","promo4.jpg"];
+  let idx = 0;
+
+  function showPromo() {
+    if (qr) qr.style.display = "none";
+    layout.style.display = "none";
+    promoWrap.style.display = "flex";
+    idx = 0;
+    document.getElementById("promoImg").src = promos[idx];
+
+    const timer = setInterval(() => {
+      idx++;
+      if (idx >= promos.length) {
+        clearInterval(timer);
+        promoWrap.style.display = "none";
+        layout.style.display = "flex";
+        if (qr) qr.style.display = "block";
       } else {
-        promoImg.src = promos[i];
+        document.getElementById("promoImg").src = promos[idx];
       }
     }, 5000);
   }
+
+  setInterval(showPromo, 75000);
 }
 
