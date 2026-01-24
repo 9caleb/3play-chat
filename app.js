@@ -15,125 +15,83 @@ const isScreen = params.has("screen");
 const isAdmin = params.has("admin");
 
 // ===== ELEMENTS =====
-const layout = document.querySelector(".layout");
-const chatBox = document.getElementById("chat");
+const layout   = document.querySelector(".layout");
+const chatBox  = document.getElementById("chat");
 const qrCanvas = document.getElementById("qr");
-const nameInput = document.getElementById("name");
-const msgInput = document.getElementById("message");
-const sendBtn = document.getElementById("sendBtn");
-
-// ===== QR =====
-if (qrCanvas) {
-  new QRious({
-    element: qrCanvas,
-    size: 320,
-    value: window.location.origin + window.location.pathname
-  });
-}
-
-// ===== NAME LOCK =====
-let lockedName = localStorage.getItem("lockedName");
-if (lockedName && nameInput) {
-  nameInput.value = lockedName;
-  nameInput.disabled = true;
-  nameInput.placeholder = "Name locked";
-}
 
 // ===== CHAT LISTENER =====
 messagesRef.limitToLast(100).on("child_added", snap => {
   if (!chatBox) return;
-
   const data = snap.val();
-  const key = snap.key;
 
   const div = document.createElement("div");
   div.className = "msg";
   div.innerHTML = `<span class="user">${data.name}</span>${data.message}`;
-
-  if (isAdmin) {
-    const del = document.createElement("span");
-    del.textContent = " ✕";
-    del.style.color = "red";
-    del.style.cursor = "pointer";
-    del.onclick = () => messagesRef.child(key).remove();
-    div.appendChild(del);
-  }
-
   chatBox.appendChild(div);
   chatBox.scrollTop = chatBox.scrollHeight;
 });
 
-// ===== SEND MESSAGE =====
-if (sendBtn && !isScreen) {
-  sendBtn.onclick = () => {
-    const name = nameInput.value.trim();
-    const message = msgInput.value.trim();
-    if (!name || !message) return;
-
-    if (!lockedName) {
-      lockedName = name;
-      localStorage.setItem("lockedName", name);
-      nameInput.disabled = true;
-    } else if (name !== lockedName) {
-      nameInput.value = lockedName;
-      return alert("Name can only be set once");
-    }
-
-    messagesRef.push({ name: lockedName, message });
-    msgInput.value = "";
-  };
-}
-
-// ===== SCREEN PROMO ROTATION（原逻辑保留） =====
+// ===== SCREEN LOGIC ONLY =====
 if (isScreen) {
-  const promos = [
-    "dj-poster.jpg",
-    "promo1.jpg",
-    "promo2.jpg",
-    "promo3.jpg",
-    "promo4.jpg"
-  ];
 
+  /* ---------- PROMO CONTAINER (左右无缝) ---------- */
+  const promoWrap = document.createElement("div");
+  promoWrap.id = "promoWrap";
+  promoWrap.style.position = "fixed";
+  promoWrap.style.inset = "0";
+  promoWrap.style.display = "none";
+  promoWrap.style.zIndex = "9999";
+  promoWrap.style.background = "#000";
+  promoWrap.style.display = "flex";
+  promoWrap.style.gap = "0";           // 关键：没有黑线
+  promoWrap.style.margin = "0";
+  promoWrap.style.padding = "0";
+
+  promoWrap.innerHTML = `
+    <img id="djImg" style="width:50%;height:100%;object-fit:cover" src="dj.jpg">
+    <img id="promoImg" style="width:50%;height:100%;object-fit:cover" src="promo1.jpg">
+  `;
+
+  document.body.appendChild(promoWrap);
+
+  const promoImgs = ["promo1.jpg","promo2.jpg","promo3.jpg","promo4.jpg"];
   let promoIndex = 0;
-  let showingPromo = false;
+  let promoTimer = null;
 
-  const promoLayer = document.createElement("div");
-  promoLayer.style.position = "fixed";
-  promoLayer.style.inset = "0";
-  promoLayer.style.backgroundSize = "cover";
-  promoLayer.style.backgroundPosition = "center";
-  promoLayer.style.display = "none";
-  promoLayer.style.zIndex = "999";
-  document.body.appendChild(promoLayer);
-
+  /* ---------- 显示 CHAT ---------- */
   function showChat() {
-    promoLayer.style.display = "none";
+    promoWrap.style.display = "none";
     layout.style.display = "flex";
     if (qrCanvas) qrCanvas.style.display = "block";
-    showingPromo = false;
+    if (promoTimer) {
+      clearInterval(promoTimer);
+      promoTimer = null;
+    }
   }
 
+  /* ---------- 显示 PROMO ---------- */
   function showPromo() {
     layout.style.display = "none";
     if (qrCanvas) qrCanvas.style.display = "none";
-    promoLayer.style.backgroundImage = `url(${promos[promoIndex]})`;
-    promoLayer.style.display = "block";
-    promoIndex = (promoIndex + 1) % promos.length;
-    showingPromo = true;
+    promoWrap.style.display = "flex";
+
+    promoIndex = 0;
+    document.getElementById("promoImg").src = promoImgs[promoIndex];
+
+    promoTimer = setInterval(() => {
+      promoIndex++;
+      if (promoIndex >= promoImgs.length) {
+        clearInterval(promoTimer);
+        promoTimer = null;
+        showChat();
+      } else {
+        document.getElementById("promoImg").src = promoImgs[promoIndex];
+      }
+    }, 5000);
   }
 
-  setInterval(() => {
-    if (!showingPromo) {
-      showPromo();
-      setTimeout(showChat, 20000);
-    }
-  }, 75000);
-
-  setInterval(() => {
-    if (showingPromo) {
-      promoLayer.style.backgroundImage = `url(${promos[promoIndex]})`;
-      promoIndex = (promoIndex + 1) % promos.length;
-    }
-  }, 5000);
+  /* ---------- 时间控制 ---------- */
+  // 75 秒 chat → 20 秒 promo（4 张 × 5 秒）
+  setInterval(showPromo, 75000);
 }
 
