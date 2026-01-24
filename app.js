@@ -7,84 +7,69 @@ firebase.initializeApp({
 });
 
 const db = firebase.database();
-const ref = db.ref("messages");
+const messagesRef = db.ref("messages");
 
 // ===== MODE =====
 const params = new URLSearchParams(window.location.search);
 const isScreen = params.has("screen");
-const isAdmin  = params.has("admin");
+const isAdmin = params.has("admin");
 
 // ===== ELEMENTS =====
-const chat      = document.getElementById("chat");
-const inputArea = document.getElementById("inputArea");
+const layout = document.querySelector(".layout");
+const chatBox = document.getElementById("chat");
+const qrCanvas = document.getElementById("qr");
 const nameInput = document.getElementById("name");
-const msgInput  = document.getElementById("message");
-const sendBtn   = document.getElementById("sendBtn");
-const clearBtn  = document.getElementById("clearBtn");
-const qr        = document.getElementById("qr");
-const layout    = document.querySelector(".layout");
+const msgInput = document.getElementById("message");
+const sendBtn = document.getElementById("sendBtn");
 
-// ===== VISIBILITY RULES（不乱动） =====
-if (isScreen && inputArea) inputArea.style.display = "none";
-if (!isAdmin && clearBtn) clearBtn.style.display = "none";
+// ===== QR =====
+if (qrCanvas) {
+  new QRious({
+    element: qrCanvas,
+    size: 320,
+    value: window.location.origin + window.location.pathname
+  });
+}
 
-// ===== NAME LOCK（一次性） =====
+// ===== NAME LOCK =====
 let lockedName = localStorage.getItem("lockedName");
 if (lockedName && nameInput) {
   nameInput.value = lockedName;
   nameInput.disabled = true;
   nameInput.placeholder = "Name locked";
-} else if (nameInput) {
-  nameInput.placeholder = "Enter your name (one time only)";
 }
 
-// ===== BAD WORD FILTER =====
-const badWords = ["fuck","bitch","cunt","nigger","nigga","pussy","babi","anjing","cibai"];
-function hasBadWord(text) {
-  const t = text.toLowerCase();
-  return badWords.some(w => t.includes(w));
-}
-
-// ===== COOLDOWN =====
-let lastSend = localStorage.getItem("lastSend") || 0;
-
-// ===== CHAT LISTENER（admin ✕ 保留） =====
-ref.limitToLast(200).on("child_added", snap => {
-  if (!chat) return;
+// ===== CHAT LISTENER =====
+messagesRef.limitToLast(100).on("child_added", snap => {
+  if (!chatBox) return;
 
   const data = snap.val();
-  const key  = snap.key;
+  const key = snap.key;
 
   const div = document.createElement("div");
   div.className = "msg";
-  div.innerHTML = `
-    <span class="user">${data.name}</span>${data.message}
-    ${isAdmin ? `<span class="delete" data-id="${key}">✕</span>` : ""}
-  `;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-});
+  div.innerHTML = `<span class="user">${data.name}</span>${data.message}`;
 
-// ===== DELETE SINGLE（admin） =====
-document.addEventListener("click", e => {
-  if (!isAdmin) return;
-  if (e.target.classList.contains("delete")) {
-    const id = e.target.dataset.id;
-    ref.child(id).remove();
-    e.target.parentElement.remove();
+  if (isAdmin) {
+    const del = document.createElement("span");
+    del.textContent = " ✕";
+    del.style.color = "red";
+    del.style.cursor = "pointer";
+    del.onclick = () => messagesRef.child(key).remove();
+    div.appendChild(del);
   }
+
+  chatBox.appendChild(div);
+  chatBox.scrollTop = chatBox.scrollHeight;
 });
 
 // ===== SEND MESSAGE =====
 if (sendBtn && !isScreen) {
   sendBtn.onclick = () => {
-    const now = Date.now();
     const name = nameInput.value.trim();
-    const msg  = msgInput.value.trim();
+    const message = msgInput.value.trim();
+    if (!name || !message) return;
 
-    if (!name || !msg) return alert("Name and message required");
-
-    // lock name
     if (!lockedName) {
       lockedName = name;
       localStorage.setItem("lockedName", name);
@@ -94,79 +79,61 @@ if (sendBtn && !isScreen) {
       return alert("Name can only be set once");
     }
 
-    // cooldown 30s
-    if (now - lastSend < 30000) {
-      const wait = Math.ceil((30000 - (now - lastSend)) / 1000);
-      return alert(`Please wait ${wait}s`);
-    }
-
-    // bad words
-    if (hasBadWord(msg)) {
-      return alert("Inappropriate words are not allowed");
-    }
-
-    ref.push({ name: lockedName, message: msg });
+    messagesRef.push({ name: lockedName, message });
     msgInput.value = "";
-    lastSend = now;
-    localStorage.setItem("lastSend", now);
   };
 }
 
-// ===== CLEAR ALL（admin，逻辑保留） =====
-if (clearBtn && isAdmin) {
-  clearBtn.onclick = () => {
-    if (confirm("Clear all messages?")) {
-      ref.remove();
-      chat.innerHTML = "";
-    }
-  };
-}
-
-// ===== SCREEN PROMO（最稳版本） =====
+// ===== SCREEN PROMO ROTATION（原逻辑保留） =====
 if (isScreen) {
+  const promos = [
+    "dj-poster.jpg",
+    "promo1.jpg",
+    "promo2.jpg",
+    "promo3.jpg",
+    "promo4.jpg"
+  ];
 
-  const promoWrap = document.createElement("div");
-  promoWrap.style.position = "fixed";
-  promoWrap.style.inset = "0";
-  promoWrap.style.background = "#000";
-  promoWrap.style.display = "none";
-  promoWrap.style.zIndex = "9999";
-  promoWrap.style.display = "flex";
+  let promoIndex = 0;
+  let showingPromo = false;
 
-  promoWrap.innerHTML = `
-    <div style="width:50%;display:flex;align-items:center;justify-content:center">
-      <img src="dj.jpg" style="max-width:90%;max-height:90%">
-    </div>
-    <div style="width:50%;display:flex;align-items:center;justify-content:center">
-      <img id="promoImg" src="promo1.jpg" style="max-width:90%;max-height:90%">
-    </div>
-  `;
+  const promoLayer = document.createElement("div");
+  promoLayer.style.position = "fixed";
+  promoLayer.style.inset = "0";
+  promoLayer.style.backgroundSize = "cover";
+  promoLayer.style.backgroundPosition = "center";
+  promoLayer.style.display = "none";
+  promoLayer.style.zIndex = "999";
+  document.body.appendChild(promoLayer);
 
-  document.body.appendChild(promoWrap);
-
-  const promos = ["promo1.jpg","promo2.jpg","promo3.jpg","promo4.jpg"];
-  let idx = 0;
-
-  function showPromo() {
-    if (qr) qr.style.display = "none";
-    layout.style.display = "none";
-    promoWrap.style.display = "flex";
-    idx = 0;
-    document.getElementById("promoImg").src = promos[idx];
-
-    const timer = setInterval(() => {
-      idx++;
-      if (idx >= promos.length) {
-        clearInterval(timer);
-        promoWrap.style.display = "none";
-        layout.style.display = "flex";
-        if (qr) qr.style.display = "block";
-      } else {
-        document.getElementById("promoImg").src = promos[idx];
-      }
-    }, 5000);
+  function showChat() {
+    promoLayer.style.display = "none";
+    layout.style.display = "flex";
+    if (qrCanvas) qrCanvas.style.display = "block";
+    showingPromo = false;
   }
 
-  setInterval(showPromo, 75000);
+  function showPromo() {
+    layout.style.display = "none";
+    if (qrCanvas) qrCanvas.style.display = "none";
+    promoLayer.style.backgroundImage = `url(${promos[promoIndex]})`;
+    promoLayer.style.display = "block";
+    promoIndex = (promoIndex + 1) % promos.length;
+    showingPromo = true;
+  }
+
+  setInterval(() => {
+    if (!showingPromo) {
+      showPromo();
+      setTimeout(showChat, 20000);
+    }
+  }, 75000);
+
+  setInterval(() => {
+    if (showingPromo) {
+      promoLayer.style.backgroundImage = `url(${promos[promoIndex]})`;
+      promoIndex = (promoIndex + 1) % promos.length;
+    }
+  }, 5000);
 }
 

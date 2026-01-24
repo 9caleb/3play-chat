@@ -14,38 +14,33 @@ body {
 .left {
   width: 40%;
   padding: 40px;
-  border-right: 1px solid #222;
 }
 
 .logo-wrap {
   display: flex;
   justify-content: center;
-  margin-bottom: 25px;
-  perspective: 1000px;
+  margin-bottom: 20px;
 }
 
 .logo-wrap img {
-  width: 340px;
-  animation: spin3d 6s linear infinite, glow 3s ease-in-out infinite;
+  width: 300px;
+  animation: spin 6s linear infinite;
 }
 
-@keyframes spin3d {
+@keyframes spin {
   from { transform: rotateY(0deg); }
   to { transform: rotateY(360deg); }
 }
 
-@keyframes glow {
-  0%,100% { filter: drop-shadow(0 0 20px #4da6ff); }
-  50% { filter: drop-shadow(0 0 45px #4da6ff); }
-}
-
-.start-left {
-  text-align: left;
+.start {
+  text-align: center;
+  font-size: 32px;
   margin-bottom: 15px;
 }
 
 #qr {
-  width: 360px;
+  width: 320px;
+  height: 320px;
   display: block;
   margin: 0 auto 15px;
 }
@@ -55,7 +50,9 @@ body {
   color: #ccc;
 }
 
-.rules p { margin: 6px 0; }
+.rules p {
+  margin: 6px 0;
+}
 
 /* RIGHT */
 .right {
@@ -71,9 +68,8 @@ body {
 }
 
 .msg {
-  font-size: 24px;
+  font-size: 22px;
   margin-bottom: 14px;
-  position: relative;
 }
 
 .msg .user {
@@ -81,90 +77,62 @@ body {
   margin-right: 6px;
 }
 
-.msg .delete {
-  position: absolute;
-  right: 0;
-  color: red;
-  cursor: pointer;
-}
-
 /* INPUT */
 .input-area {
   border-top: 1px solid #222;
   padding: 20px;
+  display: flex;
+  gap: 10px;
 }
 
 input, textarea {
-  width: 100%;
-  background: #0f0f14;
-  border: 1px solid #222;
+  background: #111;
+  border: 1px solid #333;
   color: #fff;
   padding: 14px;
   font-size: 18px;
 }
 
 textarea {
-  height: 160px;
+  flex: 1;
+  height: 100px;
 }
 
-.btn-row {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-#clearBtn {
-  background: #c0392b;
-  color: #fff;
-}
-
-/* PROMO */
-#promoOverlay {
-  display: none;
-  position: fixed;
-  inset: 0;
+button {
   background: #000;
-  z-index: 9999;
+  color: #fff;
+  border: 1px solid #fff;
+  padding: 16px 28px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-#promoOverlay.active {
-  display: flex;
-}
-
-.promo-left, .promo-right {
-  width: 50%;
-}
-
-.promo-left img, .promo-right img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* ===== MOBILE FIX (重点) ===== */
+/* MOBILE */
 @media (max-width: 900px) {
   .layout {
     flex-direction: column;
     height: auto;
   }
 
-  /* 不再隐藏 right */
-  .left {
-    width: 100%;
-    border: none;
+  #qr, #chat {
+    display: none;
   }
 
   .right {
     width: 100%;
   }
 
-  /* 只隐藏聊天，不隐藏输入 */
-  #chat {
-    display: none;
+  .input-area {
+    flex-direction: column;
   }
 
-  #qr {
-    display: none;
+  input, textarea, button {
+    width: 100%;
+    font-size: 18px;
+  }
+
+  textarea {
+    height: 140px;
   }
 }
 
