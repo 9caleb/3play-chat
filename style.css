@@ -10,17 +10,9 @@ body {
   height: 100vh;
 }
 
-/* LEFT */
 .left {
   width: 40%;
   padding: 40px;
-  border-right: 1px solid #222;
-}
-
-.logo-wrap {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 20px;
 }
 
 .logo-wrap img {
@@ -33,28 +25,21 @@ body {
   to { transform: rotateY(360deg); }
 }
 
-.center-group {
-  text-align: center;
-}
-
-.start-title {
-  font-size: 32px;
-  margin-bottom: 20px;
+.title {
+  margin: 20px 0;
 }
 
 #qr {
   width: 300px;
   height: 300px;
-  margin: 20px auto 0;
+  margin-bottom: 20px;
 }
 
-.rules {
-  margin-top: 20px;
+.rules p {
   font-size: 14px;
-  color: #ccc;
+  margin: 6px 0;
 }
 
-/* RIGHT */
 .right {
   width: 60%;
   display: flex;
@@ -63,7 +48,7 @@ body {
 
 #chat {
   flex: 1;
-  padding: 40px;
+  padding: 30px;
   overflow-y: auto;
 }
 
@@ -74,11 +59,10 @@ body {
 
 .msg .user {
   color: #4da6ff;
-  margin-right: 8px;
+  margin-right: 10px;
 }
 
 .input-area {
-  border-top: 1px solid #222;
   padding: 20px;
   display: flex;
   gap: 10px;
@@ -88,77 +72,52 @@ input, textarea {
   background: #000;
   border: 1px solid #444;
   color: #fff;
-  padding: 14px;
-  font-size: 16px;
+  padding: 12px;
 }
 
 textarea {
   flex: 1;
-  height: 80px;
 }
 
 button {
-  background: #000;
-  color: #fff;
-  border: 2px solid #fff;
+  background: #fff;
+  color: #000;
+  border: none;
   padding: 14px 24px;
   font-weight: bold;
-  cursor: pointer;
 }
 
-/* SCREEN MODE */
-.screen .input-area {
+#clearBtn {
   display: none;
+  background: red;
+  color: #fff;
 }
 
-/* PROMO */
-.promo-layer {
+#promo-screen {
+  display: none;
   position: fixed;
   inset: 0;
   display: flex;
-  z-index: 999;
 }
 
 .promo-left, .promo-right {
   width: 50%;
-  background-size: contain;
-  background-repeat: no-repeat;
+  background-size: cover;
   background-position: center;
-  background-color: #000;
 }
 
 /* MOBILE */
 @media (max-width: 900px) {
   .layout {
     flex-direction: column;
-    height: auto;
   }
 
-  .left, .right {
-    width: 100%;
-    border: none;
-  }
-
-  #qr {
+  #chat {
     display: none;
   }
 
-  .start-title {
-    text-align: left;
-    font-size: 28px;
-  }
-
-  .msg {
-    font-size: 18px;
-  }
-
-  .input-area {
-    flex-direction: column;
-  }
-
-  button {
-    font-size: 18px;
-    padding: 16px;
+  #clearBtn {
+    display: none !important;
   }
 }
 

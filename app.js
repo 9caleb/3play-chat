@@ -12,26 +12,31 @@ const params = new URLSearchParams(window.location.search);
 const isScreen = params.has("screen");
 const isAdmin = params.has("admin");
 
-if (isScreen) document.body.classList.add("screen");
+const chatBox = document.getElementById("chat");
+const nameInput = document.getElementById("name");
+const msgInput = document.getElementById("message");
+const sendBtn = document.getElementById("sendBtn");
+const clearBtn = document.getElementById("clearBtn");
 
-/* QR */
-const qrCanvas = document.getElementById("qr");
-if (qrCanvas && !isAdmin) {
+if (document.getElementById("qr")) {
   new QRious({
-    element: qrCanvas,
+    element: document.getElementById("qr"),
     size: 300,
     value: window.location.origin + window.location.pathname
   });
 }
 
-/* CHAT */
-const chatBox = document.getElementById("chat");
+/* NAME LOCK */
+if (localStorage.getItem("lockedName")) {
+  nameInput.value = localStorage.getItem("lockedName");
+  nameInput.disabled = true;
+}
+
+/* CHAT LISTENER */
 messagesRef.limitToLast(100).on("child_added", snap => {
   if (!chatBox) return;
 
   const data = snap.val();
-  const key = snap.key;
-
   const div = document.createElement("div");
   div.className = "msg";
   div.innerHTML = `<span class="user">${data.name}</span>${data.message}`;
@@ -39,73 +44,61 @@ messagesRef.limitToLast(100).on("child_added", snap => {
   if (isAdmin) {
     const x = document.createElement("button");
     x.textContent = "✕";
-    x.onclick = () => messagesRef.child(key).remove();
+    x.onclick = () => messagesRef.child(snap.key).remove();
     div.appendChild(x);
   }
 
   chatBox.appendChild(div);
-  chatBox.scrollTop = chatBox.scrollHeight;
 });
 
+/* REMOVE LIVE */
 messagesRef.on("child_removed", snap => {
-  [...document.querySelectorAll(".msg")].forEach(m => {
-    if (m.textContent.includes(snap.val().message)) {
-      m.remove();
+  [...chatBox.children].forEach(el => {
+    if (el.innerHTML.includes(snap.val().message)) {
+      el.remove();
     }
   });
 });
 
 /* SEND */
-const sendBtn = document.getElementById("sendBtn");
-if (sendBtn) {
-  const nameInput = document.getElementById("name");
-  const msgInput = document.getElementById("message");
-
-  if (localStorage.getItem("lockedName")) {
-    nameInput.value = localStorage.getItem("lockedName");
+sendBtn.onclick = () => {
+  if (nameInput.disabled === false) {
+    localStorage.setItem("lockedName", nameInput.value);
     nameInput.disabled = true;
   }
 
-  sendBtn.onclick = () => {
-    const name = nameInput.value.trim();
-    const msg = msgInput.value.trim();
-    if (!name || !msg) return;
+  messagesRef.push({
+    name: nameInput.value,
+    message: msgInput.value
+  });
 
-    localStorage.setItem("lockedName", name);
-    nameInput.disabled = true;
+  msgInput.value = "";
+};
 
-    messagesRef.push({ name, message: msg });
-    msgInput.value = "";
-  };
+/* ADMIN CLEAR ALL */
+if (isAdmin) {
+  clearBtn.style.display = "block";
+  clearBtn.onclick = () => messagesRef.remove();
 }
 
 /* SCREEN PROMO */
 if (isScreen) {
-  const promo = document.createElement("div");
-  promo.className = "promo-layer";
-  promo.innerHTML = `
-    <div class="promo-left"></div>
-    <div class="promo-right"></div>
-  `;
-  document.body.appendChild(promo);
+  document.querySelector(".layout").style.display = "none";
+  const promo = document.getElementById("promo-screen");
+  promo.style.display = "flex";
 
-  const dj = "dj-poster.jpg";
-  const promos = ["promo1.jpg","promo2.jpg","promo3.jpg","promo4.jpg"];
+  const posters = [
+    ["dj-poster.jpg", "promo1.jpg"],
+    ["dj-poster.jpg", "promo2.jpg"],
+    ["dj-poster.jpg", "promo3.jpg"],
+    ["dj-poster.jpg", "promo4.jpg"]
+  ];
+
   let i = 0;
-
   setInterval(() => {
-    promo.style.display = "flex";
-    document.querySelector(".layout").style.display = "none";
-
-    document.querySelector(".promo-left").style.backgroundImage = `url(${dj})`;
-    document.querySelector(".promo-right").style.backgroundImage = `url(${promos[i]})`;
-
-    i = (i + 1) % promos.length;
-
-    setTimeout(() => {
-      promo.style.display = "none";
-      document.querySelector(".layout").style.display = "flex";
-    }, 20000);
-  }, 75000);
+    document.querySelector(".promo-left").style.backgroundImage = `url(${posters[i][0]})`;
+    document.querySelector(".promo-right").style.backgroundImage = `url(${posters[i][1]})`;
+    i = (i + 1) % posters.length;
+  }, 5000);
 }
 
