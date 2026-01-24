@@ -1,36 +1,41 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>3PLAY Live Chat</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css"/>
 </head>
+
 <body>
 
 <div class="layout">
 
+  <!-- LEFT -->
   <div class="left">
     <div class="logo-wrap">
-      <img src="3PLAY logo design.png" alt="3PLAY Logo">
+      <img src="3PLAY logo design.png" alt="3PLAY"/>
     </div>
 
-    <h1 class="start">START CHATTING NOW</h1>
-    <canvas id="qr"></canvas>
+    <div class="center-group">
+      <h1 class="start-title">START CHATTING NOW</h1>
+      <canvas id="qr"></canvas>
+    </div>
 
     <div class="rules">
       <p>🪪 Name can be entered once only</p>
       <p>🤝 Be respectful</p>
       <p>🚫 No spamming</p>
       <p>📺 Messages appear live on screen</p>
-      <p class="enjoy">🎉 Enjoy the party! #PLAYwithme</p>
+      <p class="enjoy">🎉 Enjoy the party! <span>#PLAYwithme</span></p>
     </div>
   </div>
 
+  <!-- RIGHT -->
   <div class="right">
     <div id="chat"></div>
 
-    <div class="input-area" id="inputArea">
+    <div class="input-area">
       <input id="name" placeholder="Enter your name (one time only)">
       <textarea id="message" placeholder="Type your message"></textarea>
       <button id="sendBtn">SEND</button>

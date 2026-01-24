@@ -14,6 +14,7 @@ body {
 .left {
   width: 40%;
   padding: 40px;
+  border-right: 1px solid #222;
 }
 
 .logo-wrap {
@@ -24,7 +25,7 @@ body {
 
 .logo-wrap img {
   width: 300px;
-  animation: spin 6s linear infinite;
+  animation: spin 8s linear infinite;
 }
 
 @keyframes spin {
@@ -32,26 +33,25 @@ body {
   to { transform: rotateY(360deg); }
 }
 
-.start {
+.center-group {
   text-align: center;
+}
+
+.start-title {
   font-size: 32px;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 #qr {
-  width: 320px;
-  height: 320px;
-  display: block;
-  margin: 0 auto 15px;
+  width: 300px;
+  height: 300px;
+  margin: 20px auto 0;
 }
 
 .rules {
+  margin-top: 20px;
   font-size: 14px;
   color: #ccc;
-}
-
-.rules p {
-  margin: 6px 0;
 }
 
 /* RIGHT */
@@ -74,10 +74,9 @@ body {
 
 .msg .user {
   color: #4da6ff;
-  margin-right: 6px;
+  margin-right: 8px;
 }
 
-/* INPUT */
 .input-area {
   border-top: 1px solid #222;
   padding: 20px;
@@ -86,25 +85,46 @@ body {
 }
 
 input, textarea {
-  background: #111;
-  border: 1px solid #333;
+  background: #000;
+  border: 1px solid #444;
   color: #fff;
   padding: 14px;
-  font-size: 18px;
+  font-size: 16px;
 }
 
 textarea {
   flex: 1;
-  height: 100px;
+  height: 80px;
 }
 
 button {
   background: #000;
   color: #fff;
-  border: 1px solid #fff;
-  padding: 16px 28px;
+  border: 2px solid #fff;
+  padding: 14px 24px;
   font-weight: bold;
   cursor: pointer;
+}
+
+/* SCREEN MODE */
+.screen .input-area {
+  display: none;
+}
+
+/* PROMO */
+.promo-layer {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  z-index: 999;
+}
+
+.promo-left, .promo-right {
+  width: 50%;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-color: #000;
 }
 
 /* MOBILE */
@@ -114,25 +134,31 @@ button {
     height: auto;
   }
 
-  #qr, #chat {
+  .left, .right {
+    width: 100%;
+    border: none;
+  }
+
+  #qr {
     display: none;
   }
 
-  .right {
-    width: 100%;
+  .start-title {
+    text-align: left;
+    font-size: 28px;
+  }
+
+  .msg {
+    font-size: 18px;
   }
 
   .input-area {
     flex-direction: column;
   }
 
-  input, textarea, button {
-    width: 100%;
+  button {
     font-size: 18px;
-  }
-
-  textarea {
-    height: 140px;
+    padding: 16px;
   }
 }
 
