@@ -27,47 +27,27 @@ body {
 .logo-wrap img {
   width: 320px;
   animation: spin3d 8s linear infinite, glow 4s ease-in-out infinite;
-  transform-style: preserve-3d;
 }
 
 @keyframes spin3d {
-  from { transform: rotateY(0deg) rotateX(10deg); }
-  to   { transform: rotateY(360deg) rotateX(10deg); }
+  from { transform: rotateY(0deg); }
+  to { transform: rotateY(360deg); }
 }
 
 @keyframes glow {
-  0%,100% {
-    filter: drop-shadow(0 0 14px rgba(120,200,255,0.4))
-            drop-shadow(0 0 32px rgba(120,200,255,0.2));
-  }
-  50% {
-    filter: drop-shadow(0 0 26px rgba(120,200,255,0.8))
-            drop-shadow(0 0 54px rgba(120,200,255,0.4));
-  }
-}
-
-.center-group {
-  margin-top: -10px;
+  0%,100% { filter: drop-shadow(0 0 20px #4da6ff); }
+  50% { filter: drop-shadow(0 0 40px #4da6ff); }
 }
 
 .start-left {
   text-align: left;
-  margin-bottom: 10px;
+  margin: 10px 0;
 }
 
-#qr {
-  width: 320px;
-  height: 320px;
-}
+#qr { width: 300px; }
 
-.rules {
-  margin-top: 20px;
-  font-size: 13px;
-  color: #ccc;
-}
-
+.rules { font-size: 13px; color: #ccc; }
 .rules p { margin: 4px 0; }
-.rules .enjoy { margin-top: 10px; font-weight: bold; }
 
 /* RIGHT */
 .right {
@@ -84,24 +64,41 @@ body {
 
 .msg {
   font-size: 24px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
-.msg .user {
-  color: #4da6ff;
-  margin-right: 10px;
+.msg .user { color: #4da6ff; margin-right: 6px; }
+
+.msg .del {
+  color: red;
+  margin-left: 10px;
+  cursor: pointer;
 }
 
 .input-area {
   border-top: 1px solid #222;
   padding: 20px;
-  display: flex;
-  gap: 10px;
 }
 
 textarea {
-  flex: 1;
+  width: 100%;
   height: 120px;
+}
+
+.btn-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+button {
+  padding: 14px;
+  font-weight: bold;
+}
+
+.danger {
+  background: #c0392b;
+  color: #fff;
 }
 
 /* PROMO */
@@ -124,24 +121,11 @@ textarea {
   object-fit: cover;
 }
 
-/* ADMIN */
-#adminPanel {
-  display: none;
-  padding: 20px;
-}
-
-.admin-msg {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 6px;
-}
-
 /* MOBILE */
 @media (max-width: 900px) {
   .layout { flex-direction: column; height: auto; }
   .left, .right { width: 100%; }
   #chat, #qr { display: none; }
-  .input-area { flex-direction: column; }
   textarea { height: 160px; }
 }
 

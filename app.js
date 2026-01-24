@@ -12,43 +12,30 @@ const params = new URLSearchParams(window.location.search);
 const isScreen = params.has("screen");
 const isAdmin = params.has("admin");
 
-// QR FIX FOR GITHUB PAGES
+/* FIXED QR FOR GITHUB PAGES */
+const baseURL = "https://9caleb.github.io/3play-chat/";
 const qr = document.getElementById("qr");
 if (qr) {
-  new QRious({
-    element: qr,
-    value: window.location.href.split("?")[0],
-    size: 280
-  });
+  new QRious({ element: qr, value: baseURL, size: 280 });
 }
 
-// CHAT LISTENER
-ref.limitToLast(100).on("child_added", snap => {
+/* CHAT */
+ref.on("child_added", snap => {
   const m = snap.val();
   const key = snap.key;
-
   const chat = document.getElementById("chat");
-  if (chat) {
-    const div = document.createElement("div");
-    div.className = "msg";
-    div.innerHTML = `<span class="user">${m.name}</span>${m.message}`;
-    chat.appendChild(div);
-    chat.scrollTop = chat.scrollHeight;
-  }
+  if (!chat) return;
 
-  if (isAdmin) {
-    const adminChat = document.getElementById("adminChat");
-    const row = document.createElement("div");
-    row.className = "admin-msg";
-    row.innerHTML = `${m.name}: ${m.message} <button onclick="ref.child('${key}').remove()">X</button>`;
-    adminChat.appendChild(row);
-  }
+  const div = document.createElement("div");
+  div.className = "msg";
+  div.innerHTML = `<span class="user">${m.name}</span>${m.message}
+                   ${isAdmin ? `<span class="del" onclick="ref.child('${key}').remove()">✖</span>` : ""}`;
+  chat.appendChild(div);
 });
 
-// SEND
-const sendBtn = document.getElementById("sendBtn");
-if (sendBtn && !isScreen) {
-  sendBtn.onclick = () => {
+/* SEND */
+if (!isScreen) {
+  document.getElementById("sendBtn").onclick = () => {
     const name = document.getElementById("name").value.trim();
     const msg = document.getElementById("message").value.trim();
     if (!name || !msg) return;
@@ -57,18 +44,24 @@ if (sendBtn && !isScreen) {
   };
 }
 
-// SCREEN HIDE INPUT
-if (isScreen) {
-  const input = document.getElementById("inputArea");
-  if (input) input.style.display = "none";
+/* CLEAR ALL */
+if (isAdmin) {
+  document.getElementById("clearAll").onclick = () => {
+    if (confirm("Clear all messages?")) ref.remove();
+  };
 }
 
-// PROMO LOOP (SCREEN)
+/* SCREEN HIDE INPUT */
+if (isScreen) {
+  document.getElementById("inputArea").style.display = "none";
+}
+
+/* PROMO */
 const promoOverlay = document.getElementById("promoOverlay");
 const promoImg = document.getElementById("promoImg");
-const promos = ["promo1.jpg", "promo2.jpg", "promo3.jpg", "promo4.jpg"];
+const promos = ["promo1.jpg","promo2.jpg","promo3.jpg","promo4.jpg"];
 
-if (isScreen && promoOverlay && promoImg) {
+if (isScreen) {
   setInterval(() => {
     let i = 0;
     promoOverlay.classList.add("active");
@@ -83,15 +76,6 @@ if (isScreen && promoOverlay && promoImg) {
         promoImg.src = promos[i];
       }
     }, 5000);
-
   }, 75000);
-}
-
-// ADMIN
-if (isAdmin) {
-  document.getElementById("adminPanel").style.display = "block";
-  document.getElementById("clearAll").onclick = () => {
-    if (confirm("Clear all messages?")) ref.remove();
-  };
 }
 
