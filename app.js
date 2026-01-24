@@ -6,99 +6,92 @@ firebase.initializeApp({
 });
 
 const db = firebase.database();
-const messagesRef = db.ref("messages");
+const ref = db.ref("messages");
 
-const params = new URLSearchParams(window.location.search);
-const isScreen = params.has("screen");
+const params = new URLSearchParams(location.search);
 const isAdmin = params.has("admin");
+const isScreen = params.has("screen");
 
-const chatBox = document.getElementById("chat");
-const nameInput = document.getElementById("name");
-const msgInput = document.getElementById("message");
-const sendBtn = document.getElementById("sendBtn");
-const clearBtn = document.getElementById("clearBtn");
-
-if (document.getElementById("qr")) {
+/* QR */
+const qr = document.getElementById("qr");
+if (qr && !isAdmin && !isScreen) {
   new QRious({
-    element: document.getElementById("qr"),
+    element: qr,
     size: 300,
-    value: window.location.origin + window.location.pathname
+    value: location.origin + location.pathname
   });
 }
 
-/* NAME LOCK */
-if (localStorage.getItem("lockedName")) {
-  nameInput.value = localStorage.getItem("lockedName");
-  nameInput.disabled = true;
-}
-
-/* CHAT LISTENER */
-messagesRef.limitToLast(100).on("child_added", snap => {
-  if (!chatBox) return;
-
-  const data = snap.val();
+/* CHAT */
+const chat = document.getElementById("chat");
+ref.on("child_added", s => {
+  if (!chat) return;
+  const d = s.val();
   const div = document.createElement("div");
   div.className = "msg";
-  div.innerHTML = `<span class="user">${data.name}</span>${data.message}`;
+  div.innerHTML = `<span class="user">${d.name}</span>${d.message}`;
 
   if (isAdmin) {
     const x = document.createElement("button");
     x.textContent = "✕";
-    x.onclick = () => messagesRef.child(snap.key).remove();
+    x.onclick = () => ref.child(s.key).remove();
     div.appendChild(x);
   }
 
-  chatBox.appendChild(div);
+  chat.appendChild(div);
 });
 
-/* REMOVE LIVE */
-messagesRef.on("child_removed", snap => {
-  [...chatBox.children].forEach(el => {
-    if (el.innerHTML.includes(snap.val().message)) {
-      el.remove();
-    }
+ref.on("child_removed", s => {
+  [...document.querySelectorAll(".msg")].forEach(m => {
+    if (m.textContent.includes(s.val().message)) m.remove();
   });
 });
 
 /* SEND */
+const nameInput = document.getElementById("name");
+const msgInput = document.getElementById("message");
+const sendBtn = document.getElementById("sendBtn");
+
+if (localStorage.getItem("name")) {
+  nameInput.value = localStorage.getItem("name");
+  nameInput.disabled = true;
+}
+
 sendBtn.onclick = () => {
-  if (nameInput.disabled === false) {
-    localStorage.setItem("lockedName", nameInput.value);
-    nameInput.disabled = true;
-  }
-
-  messagesRef.push({
-    name: nameInput.value,
-    message: msgInput.value
-  });
-
+  if (!nameInput.value || !msgInput.value) return;
+  localStorage.setItem("name", nameInput.value);
+  nameInput.disabled = true;
+  ref.push({ name: nameInput.value, message: msgInput.value });
   msgInput.value = "";
 };
 
-/* ADMIN CLEAR ALL */
+/* CLEAR ALL */
 if (isAdmin) {
+  const clearBtn = document.getElementById("clearBtn");
   clearBtn.style.display = "block";
-  clearBtn.onclick = () => messagesRef.remove();
+  clearBtn.onclick = () => ref.remove();
 }
 
 /* SCREEN PROMO */
 if (isScreen) {
-  document.querySelector(".layout").style.display = "none";
-  const promo = document.getElementById("promo-screen");
-  promo.style.display = "flex";
+  document.querySelector(".input-area").style.display = "none";
 
-  const posters = [
-    ["dj-poster.jpg", "promo1.jpg"],
-    ["dj-poster.jpg", "promo2.jpg"],
-    ["dj-poster.jpg", "promo3.jpg"],
-    ["dj-poster.jpg", "promo4.jpg"]
-  ];
+  const promo = document.getElementById("promo");
+  const left = document.querySelector(".promo-left");
+  const right = document.querySelector(".promo-right");
 
+  const promos = ["promo1.jpg","promo2.jpg","promo3.jpg","promo4.jpg"];
   let i = 0;
+
   setInterval(() => {
-    document.querySelector(".promo-left").style.backgroundImage = `url(${posters[i][0]})`;
-    document.querySelector(".promo-right").style.backgroundImage = `url(${posters[i][1]})`;
-    i = (i + 1) % posters.length;
-  }, 5000);
+    promo.style.display = "flex";
+    left.style.backgroundImage = "url(dj-poster.jpg)";
+    right.style.backgroundImage = `url(${promos[i]})`;
+    i = (i + 1) % promos.length;
+
+    setTimeout(() => {
+      promo.style.display = "none";
+    }, 20000);
+  }, 75000);
 }
 

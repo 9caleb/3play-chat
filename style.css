@@ -10,6 +10,7 @@ body {
   height: 100vh;
 }
 
+/* LEFT */
 .left {
   width: 40%;
   padding: 40px;
@@ -40,6 +41,7 @@ body {
   margin: 6px 0;
 }
 
+/* RIGHT */
 .right {
   width: 60%;
   display: flex;
@@ -54,12 +56,12 @@ body {
 
 .msg {
   font-size: 22px;
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .msg .user {
   color: #4da6ff;
-  margin-right: 10px;
+  margin-right: 8px;
 }
 
 .input-area {
@@ -72,35 +74,41 @@ input, textarea {
   background: #000;
   border: 1px solid #444;
   color: #fff;
-  padding: 12px;
+  padding: 14px;
+  font-size: 16px;
 }
 
 textarea {
   flex: 1;
+  height: 100px;
 }
 
 button {
-  background: #fff;
-  color: #000;
-  border: none;
+  background: #000;
+  color: #fff;
+  border: 2px solid #fff;
   padding: 14px 24px;
   font-weight: bold;
+  cursor: pointer;
 }
 
 #clearBtn {
   display: none;
   background: red;
-  color: #fff;
+  border: none;
 }
 
-#promo-screen {
+/* PROMO (SCREEN ONLY) */
+#promo {
   display: none;
   position: fixed;
   inset: 0;
+  z-index: 999;
   display: flex;
 }
 
-.promo-left, .promo-right {
+.promo-left,
+.promo-right {
   width: 50%;
   background-size: cover;
   background-position: center;
@@ -110,14 +118,29 @@ button {
 @media (max-width: 900px) {
   .layout {
     flex-direction: column;
+    height: auto;
   }
 
-  #chat {
+  .left, .right {
+    width: 100%;
+  }
+
+  #qr,
+  #chat,
+  #clearBtn {
     display: none;
   }
 
-  #clearBtn {
-    display: none !important;
+  .input-area {
+    flex-direction: column;
+  }
+
+  input, textarea, button {
+    font-size: 18px;
+  }
+
+  textarea {
+    height: 140px;
   }
 }
 
