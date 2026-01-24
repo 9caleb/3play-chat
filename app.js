@@ -7,62 +7,63 @@ firebase.initializeApp({
 });
 
 const db = firebase.database();
-const messagesRef = db.ref("messages");
+const ref = db.ref("messages");
 
-// ===== MODE DETECTION =====
+// ===== MODE =====
 const params = new URLSearchParams(window.location.search);
 const isScreen = params.has("screen");
 const isAdmin = params.has("admin");
 
-// ===== FIXED MOBILE ENTRY URL (GITHUB PAGES) =====
-const MOBILE_URL = "https://9caleb.github.io/3play-chat/";
-
-// ===== QR GENERATION (SCREEN ONLY) =====
-const qrCanvas = document.getElementById("qr");
-if (qrCanvas && isScreen) {
-  new QRious({
-    element: qrCanvas,
-    value: MOBILE_URL,
-    size: 360
-  });
-}
-
-// ===== UI MODE CONTROL =====
+// ===== ELEMENTS =====
+const chat = document.getElementById("chat");
 const inputArea = document.getElementById("inputArea");
-const chatBox = document.getElementById("chat");
+const nameInput = document.getElementById("name");
+const msgInput = document.getElementById("message");
+const sendBtn = document.getElementById("sendBtn");
+const clearBtn = document.getElementById("clearBtn");
 
-// Screen: no input
-if (isScreen && inputArea) {
-  inputArea.style.display = "none";
+// ===== MOBILE NAME LOCK =====
+let lockedName = localStorage.getItem("lockedName");
+if (lockedName && nameInput) {
+  nameInput.value = lockedName;
+  nameInput.disabled = true;
+  nameInput.placeholder = "Name locked";
 }
 
-// Mobile: no chat
-if (!isScreen && !isAdmin && chatBox && window.innerWidth < 900) {
-  chatBox.style.display = "none";
+// ===== BAD WORD FILTER (BASIC) =====
+const badWords = [
+  "fuck","fuk","shit","bitch","asshole","cunt",
+  "nigger","niga","nigga","retard","pussy"
+];
+
+function hasBadWord(text) {
+  const t = text.toLowerCase();
+  return badWords.some(w => t.includes(w));
 }
 
-// Admin: no QR
-if (isAdmin && qrCanvas) {
-  qrCanvas.remove();
-}
+// ===== COOLDOWN (30s) =====
+let lastSendTime = localStorage.getItem("lastSendTime") || 0;
+
+// ===== MODE UI CONTROL =====
+if (isScreen && inputArea) inputArea.style.display = "none";
+if (!isScreen && !isAdmin && chat) chat.style.display = "none";
+if (isAdmin) document.getElementById("qr")?.remove();
 
 // ===== CHAT LISTENER =====
-messagesRef.limitToLast(200).on("child_added", snap => {
+ref.limitToLast(200).on("child_added", snap => {
   const data = snap.val();
   const key = snap.key;
 
-  if (!chatBox) return;
+  if (!chat) return;
 
   const div = document.createElement("div");
   div.className = "msg";
-
   div.innerHTML = `
     <span class="user">${data.name}</span>${data.message}
     ${isAdmin ? `<span class="delete" data-id="${key}">✕</span>` : ""}
   `;
-
-  chatBox.appendChild(div);
-  chatBox.scrollTop = chatBox.scrollHeight;
+  chat.appendChild(div);
+  chat.scrollTop = chat.scrollHeight;
 });
 
 // ===== DELETE SINGLE (ADMIN) =====
@@ -70,31 +71,84 @@ document.addEventListener("click", e => {
   if (!isAdmin) return;
   if (e.target.classList.contains("delete")) {
     const id = e.target.dataset.id;
-    messagesRef.child(id).remove();
+    ref.child(id).remove();
     e.target.parentElement.remove();
   }
 });
 
 // ===== SEND MESSAGE =====
-const sendBtn = document.getElementById("sendBtn");
 if (sendBtn && !isScreen) {
-  sendBtn.addEventListener("click", () => {
-    const name = document.getElementById("name")?.value.trim();
-    const msg = document.getElementById("message")?.value.trim();
-    if (!name || !msg) return;
-    messagesRef.push({ name, message: msg });
-    document.getElementById("message").value = "";
-  });
+  sendBtn.onclick = () => {
+    const now = Date.now();
+
+    const name = nameInput.value.trim();
+    const msg = msgInput.value.trim();
+
+    if (!name || !msg) return alert("Name and message required");
+
+    // name lock
+    if (!lockedName) {
+      localStorage.setItem("lockedName", name);
+      lockedName = name;
+      nameInput.disabled = true;
+    } else if (name !== lockedName) {
+      nameInput.value = lockedName;
+      return alert("Name can only be set once");
+    }
+
+    // cooldown
+    if (now - lastSendTime < 30000) {
+      const wait = Math.ceil((30000 - (now - lastSendTime)) / 1000);
+      return alert(`Please wait ${wait}s before sending again`);
+    }
+
+    // bad words
+    if (hasBadWord(msg)) {
+      return alert("Message contains inappropriate words");
+    }
+
+    ref.push({ name, message: msg });
+    msgInput.value = "";
+    lastSendTime = now;
+    localStorage.setItem("lastSendTime", now);
+  };
 }
 
 // ===== CLEAR ALL (ADMIN) =====
-const clearBtn = document.getElementById("clearBtn");
 if (clearBtn && isAdmin) {
-  clearBtn.addEventListener("click", () => {
+  clearBtn.onclick = () => {
     if (confirm("Clear all messages?")) {
-      messagesRef.remove();
-      if (chatBox) chatBox.innerHTML = "";
+      ref.remove();
+      chat.innerHTML = "";
     }
-  });
+  };
+}
+
+// ===== PROMO LOOP (SCREEN ONLY) =====
+const promoOverlay = document.getElementById("promoOverlay");
+const promoImg = document.getElementById("promoImg");
+const promos = ["promo1.jpg","promo2.jpg","promo3.jpg","promo4.jpg"];
+
+if (isScreen && promoOverlay && promoImg) {
+  // first run quick so you SEE it
+  setTimeout(runPromo, 10000);
+  // then normal loop
+  setInterval(runPromo, 75000);
+
+  function runPromo() {
+    let i = 0;
+    promoOverlay.classList.add("active");
+    promoImg.src = promos[i];
+
+    const t = setInterval(() => {
+      i++;
+      if (i >= promos.length) {
+        clearInterval(t);
+        promoOverlay.classList.remove("active");
+      } else {
+        promoImg.src = promos[i];
+      }
+    }, 5000);
+  }
 }
 
