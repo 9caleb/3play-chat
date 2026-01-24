@@ -17,7 +17,7 @@
     </div>
 
     <div class="center-group">
-      <h1>START CHATTING NOW</h1>
+      <h1 class="start-left">START CHATTING NOW</h1>
       <canvas id="qr"></canvas>
     </div>
 
@@ -34,7 +34,8 @@
   <div class="right">
     <div id="chat"></div>
 
-    <div class="input-area">
+    <!-- INPUT (HIDDEN ON SCREEN) -->
+    <div class="input-area" id="inputArea">
       <input id="name" placeholder="Enter your name (one time only)">
       <textarea id="message" placeholder="Type your message"></textarea>
       <button id="sendBtn">SEND</button>
@@ -51,6 +52,13 @@
   <div class="promo-right">
     <img id="promoImg" src="promo1.jpg">
   </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="adminPanel">
+  <h2>ADMIN</h2>
+  <button id="clearAll">CLEAR ALL MSG</button>
+  <div id="adminChat"></div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>

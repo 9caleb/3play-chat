@@ -47,19 +47,17 @@ body {
 }
 
 .center-group {
-  text-align: center;
   margin-top: -10px;
 }
 
-.center-group h1 {
-  font-size: 32px;
-  margin: 10px 0 10px;
+.start-left {
+  text-align: left;
+  margin-bottom: 10px;
 }
 
 #qr {
   width: 320px;
   height: 320px;
-  margin: 0 auto;
 }
 
 .rules {
@@ -68,14 +66,8 @@ body {
   color: #ccc;
 }
 
-.rules p {
-  margin: 4px 0;
-}
-
-.rules .enjoy {
-  margin-top: 10px;
-  font-weight: bold;
-}
+.rules p { margin: 4px 0; }
+.rules .enjoy { margin-top: 10px; font-weight: bold; }
 
 /* RIGHT */
 .right {
@@ -107,78 +99,49 @@ body {
   gap: 10px;
 }
 
-input, textarea {
-  background: #0f0f14;
-  border: 1px solid #222;
-  color: #fff;
-  padding: 12px;
-  font-size: 16px;
-}
-
 textarea {
   flex: 1;
   height: 120px;
 }
 
-button {
-  background: #4da6ff;
-  border: none;
-  padding: 14px 24px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-/* PROMO OVERLAY — 关键修复 */
+/* PROMO */
 #promoOverlay {
-  display: none;              /* 只保留这一句 */
+  display: none;
   position: fixed;
   inset: 0;
-  z-index: 9999;
   background: #000;
+  z-index: 9999;
 }
 
 #promoOverlay.active {
   display: flex;
 }
 
-.promo-left, .promo-right {
-  width: 50%;
-}
-
-.promo-left img,
-.promo-right img {
+.promo-left, .promo-right { width: 50%; }
+.promo-left img, .promo-right img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
+/* ADMIN */
+#adminPanel {
+  display: none;
+  padding: 20px;
+}
+
+.admin-msg {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 6px;
+}
+
 /* MOBILE */
 @media (max-width: 900px) {
-  .layout {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .left {
-    width: 100%;
-    border-right: none;
-  }
-
-  #qr,
-  #chat {
-    display: none;
-  }
-
-  .right {
-    width: 100%;
-  }
-
-  .input-area {
-    flex-direction: column;
-  }
-
-  textarea {
-    height: 160px;
-  }
+  .layout { flex-direction: column; height: auto; }
+  .left, .right { width: 100%; }
+  #chat, #qr { display: none; }
+  .input-area { flex-direction: column; }
+  textarea { height: 160px; }
 }
 
