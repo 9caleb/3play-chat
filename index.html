@@ -11,16 +11,18 @@
 <div class="layout">
 
   <!-- LEFT -->
-  <div class="left">
+  <div class="left" id="leftPanel">
     <div class="logo-wrap">
-      <img src="3PLAY logo design.png">
+      <img src="3PLAY logo design.png" alt="3PLAY Logo">
     </div>
 
-    <h1 class="start-left">START CHATTING NOW</h1>
-    <canvas id="qr"></canvas>
+    <div class="center-group">
+      <h1 id="startText">START CHATTING NOW</h1>
+      <canvas id="qr"></canvas>
+    </div>
 
-    <div class="rules">
-      <p>👤 Your name can be entered once only and cannot be changed</p>
+    <div class="rules" id="rules">
+      <p>🪪 Your name can be entered once only and cannot be changed</p>
       <p>🤝 Be respectful. No rude or offensive words</p>
       <p>🚫 No spamming</p>
       <p>📺 Messages appear live on screen</p>
@@ -29,26 +31,17 @@
   </div>
 
   <!-- RIGHT -->
-  <div class="right">
+  <div class="right" id="rightPanel">
     <div id="chat"></div>
 
     <div class="input-area" id="inputArea">
       <input id="name" placeholder="Enter your name (one time only)">
       <textarea id="message" placeholder="Type your message"></textarea>
-
-      <div class="btn-row">
-        <button id="sendBtn">SEND</button>
-        <button id="clearAll" class="danger">CLEAR ALL</button>
-      </div>
+      <button id="sendBtn">SEND</button>
+      <button id="clearBtn">CLEAR ALL MSG</button>
     </div>
   </div>
 
-</div>
-
-<!-- PROMO -->
-<div id="promoOverlay">
-  <div class="promo-left"><img src="dj.jpg"></div>
-  <div class="promo-right"><img id="promoImg" src="promo1.jpg"></div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
