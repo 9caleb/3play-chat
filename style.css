@@ -1,157 +1,75 @@
 body {
   margin: 0;
-  background: #050508;
+  background: #000;
   color: #fff;
   font-family: Arial, Helvetica, sans-serif;
 }
 
-.layout {
-  display: flex;
-  height: 100vh;
-}
-
-/* LEFT */
-.left {
-  width: 40%;
-  padding: 40px;
-}
-
-.logo-wrap {
+.logo {
   text-align: center;
+  font-size: 42px;
 }
 
-.logo-wrap img {
-  width: 300px;
-  animation: spin 7s linear infinite;
-}
-
-@keyframes spin {
-  from { transform: rotateY(0deg); }
-  to { transform: rotateY(360deg); }
-}
-
-.title {
-  text-align: center;
-  margin: 20px 0;
-}
-
-#qr {
-  display: block;
-  width: 300px;
-  height: 300px;
-  margin: 0 auto 20px;
-}
-
-.rules {
-  font-size: 14px;
+.big {
+  font-size: 80px;
 }
 
 .rules p {
   margin: 6px 0;
 }
 
-/* RIGHT */
-.right {
-  width: 60%;
-  display: flex;
-  flex-direction: column;
-}
-
-#chat {
-  flex: 1;
-  padding: 30px;
-  overflow-y: auto;
-}
-
-.msg {
-  font-size: 22px;
-  margin-bottom: 12px;
-}
-
-.msg .user {
-  color: #4da6ff;
-  margin-right: 8px;
-}
-
-.input-area {
-  padding: 20px;
-  display: flex;
-  gap: 10px;
-}
-
-input, textarea {
-  background: #000;
-  border: 1px solid #444;
-  color: #fff;
-  padding: 14px;
+input, textarea, button {
+  width: 100%;
+  padding: 16px;
+  margin: 10px 0;
   font-size: 16px;
-}
-
-textarea {
-  flex: 1;
-  height: 100px;
 }
 
 button {
   background: #000;
   color: #fff;
   border: 2px solid #fff;
-  padding: 14px 24px;
-  font-weight: bold;
-  cursor: pointer;
 }
 
-#clearBtn {
-  display: none;
-  background: red;
-  border: none;
+#admin {
+  margin-top: 30px;
 }
 
-/* SCREEN PROMO */
-#screenPromo {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 999;
+#chat div {
+  margin: 10px 0;
+}
+
+/* SCREEN */
+.screen {
   display: flex;
+  height: 100vh;
 }
 
-.promo-dj,
-.promo-img {
-  width: 50%;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: #000;
+.screen-left {
+  width: 40%;
+  padding: 40px;
+}
+
+.screen-right {
+  width: 60%;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.msg {
+  font-size: 26px;
+  margin-bottom: 16px;
+}
+
+.msg .user {
+  color: #4da6ff;
+  margin-right: 10px;
 }
 
 /* MOBILE */
 @media (max-width: 900px) {
-  .layout {
-    flex-direction: column;
-    height: auto;
-  }
-
-  .left, .right {
-    width: 100%;
-  }
-
-  #qr,
-  #chat,
-  #clearBtn {
+  #admin {
     display: none;
-  }
-
-  .input-area {
-    flex-direction: column;
-  }
-
-  textarea {
-    height: 140px;
-  }
-
-  button {
-    font-size: 18px;
   }
 }
 

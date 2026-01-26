@@ -3,55 +3,82 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3PLAY Live Chat</title>
+  <title>3PLAY Chat</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="input">
 
-<div class="layout">
+<h1 class="logo">3PLAY</h1>
 
-  <!-- LEFT -->
-  <div class="left">
-    <div class="logo-wrap">
-      <img src="3PLAY logo design.png" alt="3PLAY">
-    </div>
-
-    <h1 class="title">START CHATTING NOW</h1>
-    <canvas id="qr"></canvas>
-
-    <div class="rules">
-      <p>🪪 Name can be entered once only</p>
-      <p>🤝 Be respectful</p>
-      <p>🚫 No spamming</p>
-      <p>📺 Messages appear live on screen</p>
-      <p>🎉 Enjoy the party! <span>#PLAYwithme</span></p>
-    </div>
-  </div>
-
-  <!-- RIGHT -->
-  <div class="right">
-    <div id="chat"></div>
-
-    <div class="input-area">
-      <input id="name" placeholder="Enter your name (one time only)">
-      <textarea id="message" placeholder="Type your message"></textarea>
-      <button id="sendBtn">SEND</button>
-      <button id="clearBtn">CLEAR ALL</button>
-    </div>
-  </div>
-
+<div class="rules">
+  <p>🪪 Name can be entered once only</p>
+  <p>🤝 Be respectful</p>
+  <p>🚫 No spamming</p>
+  <p>🎉 Enjoy the party! #PLAYwithme</p>
 </div>
 
-<!-- SCREEN PROMO -->
-<div id="screenPromo">
-  <div class="promo-dj"></div>
-  <div class="promo-img"></div>
+<input id="name" placeholder="Your name (one time only)">
+<textarea id="msg" placeholder="Your message"></textarea>
+<button id="send">SEND</button>
+
+<!-- ADMIN AREA -->
+<div id="admin">
+  <button id="clear">CLEAR ALL</button>
+  <div id="chat"></div>
 </div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
-<script src="app.js"></script>
+
+<script>
+firebase.initializeApp({
+  apiKey: "AIzaSyBMoeGpRpLb8Ooh47WIlKCrCPC7ocZ2ZUo",
+  authDomain: "play-chatbox.firebaseapp.com",
+  databaseURL: "https://play-chatbox-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "play-chatbox"
+});
+
+const db = firebase.database();
+const ref = db.ref("messages");
+
+const nameInput = document.getElementById("name");
+const msgInput = document.getElementById("msg");
+const sendBtn = document.getElementById("send");
+
+/* name lock */
+if (localStorage.getItem("name")) {
+  nameInput.value = localStorage.getItem("name");
+  nameInput.disabled = true;
+}
+
+sendBtn.onclick = () => {
+  if (!nameInput.value || !msgInput.value) return;
+  localStorage.setItem("name", nameInput.value);
+  nameInput.disabled = true;
+  ref.push({ name: nameInput.value, message: msgInput.value });
+  msgInput.value = "";
+};
+
+/* admin */
+const chat = document.getElementById("chat");
+const clearBtn = document.getElementById("clear");
+
+ref.on("child_added", s => {
+  const d = s.val();
+  const div = document.createElement("div");
+  div.id = s.key;
+  div.innerHTML = `<b>${d.name}</b>: ${d.message}
+    <button onclick="ref.child('${s.key}').remove()">✕</button>`;
+  chat.appendChild(div);
+});
+
+ref.on("child_removed", s => {
+  const el = document.getElementById(s.key);
+  if (el) el.remove();
+});
+
+clearBtn.onclick = () => ref.remove();
+</script>
+
 </body>
 </html>
-
