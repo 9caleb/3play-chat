@@ -1,54 +1,34 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>3PLAY Live Chat</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3PLAY Chat</title>
+<link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="mobile">
 
-<div class="layout">
+<h1 class="logo">3PLAY</h1>
 
-  <div class="left">
-    <div class="logo-wrap">
-      <img src="3PLAY logo design.png" alt="3PLAY Logo">
-    </div>
-
-    <div class="center-group">
-      <h1>START CHATTING NOW</h1>
-      <canvas id="qr"></canvas>
-    </div>
-
-    <div class="rules">
-      <p>🪪 Your name can be entered once only and cannot be changed</p>
-      <p>🤝 Be respectful. No rude or offensive words</p>
-      <p>🚫 No spamming</p>
-      <p>📺 Messages appear live on screen</p>
-      <p class="enjoy">🎉 Enjoy the party! <span>#PLAYwithme</span></p>
-    </div>
-  </div>
-
-  <div class="right">
-    <div id="chat"></div>
-
-    <div class="input-area">
-      <input id="name" placeholder="Enter your name (one time only)">
-      <textarea id="message" placeholder="Type your message (max 80 chars)"></textarea>
-      <button onclick="sendMessage()">SEND</button>
-    </div>
-  </div>
-
+<div class="rules">
+  <p>🪪 Name can be entered once only</p>
+  <p>🤝 Be respectful</p>
+  <p>🚫 No spamming</p>
+  <p>🎉 Enjoy the party! #PLAYwithme</p>
 </div>
 
-<!-- VIDEO (SCREEN ONLY) -->
-<video id="screen-video" src="24Jan-3Play.mp4" muted playsinline></video>
+<input id="name" placeholder="Your name (one time only)">
+<textarea id="message" placeholder="Type your message"></textarea>
+<button id="send">SEND</button>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 <script src="app.js"></script>
 
+<script>
+initFirebase();
+initMobile();
+</script>
 </body>
 </html>
 

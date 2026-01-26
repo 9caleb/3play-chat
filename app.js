@@ -1,34 +1,90 @@
-// Firebase
-firebase.initializeApp({
-  apiKey: "AIzaSyBMoeGpRpLb8Ooh47WIlKCrCPC7ocZ2ZUo",
-  authDomain: "play-chatbox.firebaseapp.com",
-  databaseURL: "https://play-chatbox-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "play-chatbox"
-});
+let db, ref;
+let lastSent = 0;
+const COOLDOWN = 30000;
+const BAD_WORDS = ["fuck","shit","bitch","asshole","cibai","pukimak"];
 
-const db = firebase.database();
-const messagesRef = db.ref("messages");
+function initFirebase() {
+  firebase.initializeApp({
+    apiKey: "AIzaSyBMoeGpRpLb8Ooh47WIlKCrCPC7ocZ2ZUo",
+    authDomain: "play-chatbox.firebaseapp.com",
+    databaseURL: "https://play-chatbox-default-rtdb.asia-southeast1.firebasedatabase.app",
+    projectId: "play-chatbox"
+  });
+  db = firebase.database();
+  ref = db.ref("messages");
+}
 
-const params = new URLSearchParams(window.location.search);
-const isScreen = params.has("screen");
+/* ---------- MOBILE ---------- */
+function initMobile() {
+  const nameInput = document.getElementById("name");
+  const msgInput = document.getElementById("message");
+  const sendBtn = document.getElementById("send");
 
-// CHAT LISTENER
-messagesRef.limitToLast(100).on("child_added", snap => {
-  const data = snap.val();
+  if (localStorage.getItem("name")) {
+    nameInput.value = localStorage.getItem("name");
+    nameInput.disabled = true;
+  }
+
+  sendBtn.onclick = () => {
+    const now = Date.now();
+    if (now - lastSent < COOLDOWN) return;
+
+    const name = nameInput.value.trim();
+    let msg = msgInput.value.trim();
+    if (!name || !msg) return;
+
+    BAD_WORDS.forEach(w=>{
+      const r = new RegExp(w,"gi");
+      msg = msg.replace(r,"***");
+    });
+
+    localStorage.setItem("name", name);
+    nameInput.disabled = true;
+
+    ref.push({ name, message: msg });
+    msgInput.value = "";
+    lastSent = now;
+  };
+}
+
+/* ---------- ADMIN ---------- */
+function initAdmin() {
   const chat = document.getElementById("chat");
+  const clear = document.getElementById("clear");
 
-  const div = document.createElement("div");
-  div.className = "msg";
-  div.innerHTML = `<span class="user">${data.name}</span>${data.message}`;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-});
+  ref.on("child_added", s=>{
+    const d = s.val();
+    const div = document.createElement("div");
+    div.id = s.key;
+    div.innerHTML = `<b>${d.name}</b>: ${d.message}
+      <button onclick="ref.child('${s.key}').remove()">✕</button>`;
+    chat.appendChild(div);
+  });
 
-// SEND
-window.sendMessage = function () {
-  const name = document.getElementById("name").value.trim();
-  const message = document.getElementById("message").value.trim();
-  if (!name || !message) return;
+  ref.on("child_removed", s=>{
+    const el = document.getElementById(s.key);
+    if (el) el.remove();
+  });
 
-  messagesRef.push({ name, message
+  clear.onclick = ()=>ref.remove();
+}
+
+/* ---------- SCREEN ---------- */
+function initScreen() {
+  new QRious({
+    element: document.getElementById("qr"),
+    size: 260,
+    value: location.origin + "/index.html"
+  });
+
+  const chat = document.getElementById("chat");
+  ref.limitToLast(50).on("child_added", s=>{
+    const d = s.val();
+    const div = document.createElement("div");
+    div.className = "msg";
+    div.innerHTML = `<span class="user">${d.name}</span>${d.message}`;
+    chat.appendChild(div);
+    chat.scrollTop = chat.scrollHeight;
+  });
+}
 

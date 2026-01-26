@@ -1,72 +1,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="UTF-8">
-  <title>3PLAY Screen</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<title>3PLAY Screen</title>
+<link rel="stylesheet" href="style.css">
 </head>
-<body>
+<body class="screen">
 
-<div class="layout">
+<div class="screen-left">
+  <h1 class="logo big">3PLAY</h1>
+  <h2>START CHATTING NOW</h2>
+  <canvas id="qr"></canvas>
 
-  <div class="left">
-    <div class="logo-wrap">
-      <img src="3PLAY logo design.png">
-    </div>
-
-    <div class="center-group">
-      <h1>START CHATTING NOW</h1>
-      <canvas id="qr"></canvas>
-    </div>
-
-    <div class="rules">
-      <p>🪪 Name can be entered once only</p>
-      <p>🤝 Be respectful</p>
-      <p>🚫 No spamming</p>
-      <p>📺 Messages appear live on screen</p>
-      <p>🎉 Enjoy the party! <span>#PLAYwithme</span></p>
-    </div>
+  <div class="rules">
+    <p>🪪 Name once only</p>
+    <p>🤝 Be respectful</p>
+    <p>🚫 No spamming</p>
   </div>
-
-  <div class="right">
-    <div id="chat"></div>
-  </div>
-
 </div>
+
+<div class="screen-right" id="chat"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+<script src="app.js"></script>
 
 <script>
-firebase.initializeApp({
-  apiKey: "AIzaSyBMoeGpRpLb8Ooh47WIlKCrCPC7ocZ2ZUo",
-  authDomain: "play-chatbox.firebaseapp.com",
-  databaseURL: "https://play-chatbox-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "play-chatbox"
-});
-
-const db = firebase.database();
-const ref = db.ref("messages");
-
-new QRious({
-  element: document.getElementById("qr"),
-  size: 320,
-  value: location.origin + "/index.html"
-});
-
-const chat = document.getElementById("chat");
-
-ref.limitToLast(50).on("child_added", s => {
-  const d = s.val();
-  const div = document.createElement("div");
-  div.className = "msg";
-  div.innerHTML = `<span class="user">${d.name}</span>${d.message}`;
-  chat.appendChild(div);
-  chat.scrollTop = chat.scrollHeight;
-});
+initFirebase();
+initScreen();
 </script>
-
 </body>
 </html>
 
