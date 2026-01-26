@@ -21,7 +21,7 @@ if (isScreen) {
   if (ia) ia.style.display = "none";
 }
 
-/* ===== QR（只给 screen）===== */
+/* QR（只给 screen） */
 if (isScreen) {
   window.addEventListener("load", function () {
     var qr = document.getElementById("qr");
@@ -34,12 +34,12 @@ if (isScreen) {
   });
 }
 
-/* 冷却（admin 直接跳过） */
+/* 冷却（admin 跳过） */
 var COOLDOWN = 15000;
 var lastSent = 0;
 
 /* 脏话 */
-var banned = ["fuck","babi","pkm","pukimak","bodo","bodoh","lanciao","lanjiao","cibai","shit","bitch","asshole","cunt","nigga","retard"];
+var banned = ["fuck","shit","cibai","jibai","sohai","babi","puki","pukima","pukimak","cb","bodo","bodoh","bitch","asshole","cunt","nigga","retard"];
 function hasBadWord(t){
   return banned.some(w => t.toLowerCase().includes(w));
 }
@@ -55,6 +55,16 @@ if (isAdmin && nameInput) {
     nameInput.value = saved;
     nameInput.disabled = true;
   }
+}
+
+/* ENTER 发送（admin only） */
+if (isAdmin) {
+  document.addEventListener("keydown", function(e){
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
 }
 
 window.sendMessage = function () {
@@ -76,21 +86,20 @@ window.sendMessage = function () {
     localStorage.setItem("chat_name", name);
     nameInput.disabled = true;
     lastSent = now;
+    alert("Message successfully sent!");
   }
 
   messagesRef.push({ name, message: msg });
   msgInput.value = "";
-
-  alert("Message successfully sent!");
 };
 
-/* 删除（admin） */
+/* admin 删除 */
 function deleteMessage(key){
   if (!isAdmin) return;
   messagesRef.child(key).remove();
 }
 
-/* 渲染消息 */
+/* 渲染 */
 messagesRef.limitToLast(100).on("child_added", snap => {
   var chat = document.getElementById("chat");
   if (!chat) return;
@@ -106,15 +115,13 @@ messagesRef.limitToLast(100).on("child_added", snap => {
   row.innerHTML =
     "<span class='user'>" + d.name + "</span>" +
     d.message +
-    (isAdmin
-      ? " <span class='del' onclick=\"deleteMessage('" + key + "')\">❌</span>"
-      : "");
+    (isAdmin ? " <span class='del' onclick=\"deleteMessage('" + key + "')\">❌</span>" : "");
 
   chat.appendChild(row);
   chat.scrollTop = chat.scrollHeight;
 });
 
-/* admin 即时移除 */
+/* 即时移除 */
 messagesRef.on("child_removed", snap => {
   var el = document.querySelector(".msg[data-key='" + snap.key + "']");
   if (el) el.remove();

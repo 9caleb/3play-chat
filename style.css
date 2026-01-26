@@ -35,17 +35,18 @@ body {
   to   { transform: rotateY(360deg) rotateX(10deg); }
 }
 
+/* center */
 .center-group {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: -10px;   /* ⬆️ 整体往上 */
+  margin-top: -26px;   /* 🔼 screen 再上 */
 }
 
 .qr-wrap {
   display: flex;
   justify-content: center;
-  margin-top: -6px;    /* ⬆️ QR 再往上 */
+  margin-top: -18px;   /* 🔼 QR 再上 */
 }
 
 #qr {
@@ -53,6 +54,7 @@ body {
   height: 360px;
 }
 
+/* rules */
 .rules {
   margin-top: 18px;
   font-size: 13px;
@@ -89,7 +91,7 @@ body {
   font-weight: bold;
 }
 
-/* admin ❌ */
+/* admin delete */
 .del {
   color: #ff3b3b;
   cursor: pointer;
@@ -142,20 +144,13 @@ button {
   cursor: pointer;
 }
 
-/* ADMIN */
-body.admin .name-wrap {
-  width: 200px;
+/* ===== ADMIN ONLY ===== */
+body.admin .rules,
+body.admin .name-hint {
+  display: none;   /* ❌ admin 不要规则 & 提示 */
 }
 
-body.admin textarea {
-  min-height: 140px;
-}
-
-body.admin button {
-  width: auto;
-}
-
-/* MOBILE */
+/* ===== MOBILE ===== */
 @media (max-width: 900px) {
 
   .layout {
@@ -217,11 +212,10 @@ body.admin button {
   }
 }
 
-/* ===== FORCE SCREEN MODE ===== */
+/* ===== FORCE SCREEN ===== */
 body.screen .qr-wrap {
   display: flex !important;
 }
-
 body.screen #qr {
   display: block !important;
 }
