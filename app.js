@@ -34,21 +34,17 @@ if (isScreen) {
   });
 }
 
-/* ===== 用户名颜色系统 ===== */
-
-/* 亮色池（黑底专用，不重复轮换） */
+/* ===== 用户名颜色 ===== */
 var COLOR_POOL = [
   "#4da6ff", "#6cff9b", "#ffcf4d", "#ff6cf2",
   "#6cffe7", "#ff6c6c", "#b36cff", "#6cffd1",
   "#ffd36c", "#6ca8ff", "#ff9f6c", "#7dff6c"
 ];
-
 var userColorMap = {};
 var colorIndex = 0;
 
 function getUserColor(name) {
-  if (name === "ADMIN") return "#ff3b3b"; // 🔴 admin 固定红
-
+  if (name === "ADMIN") return "#ff3b3b";
   if (!userColorMap[name]) {
     userColorMap[name] = COLOR_POOL[colorIndex % COLOR_POOL.length];
     colorIndex++;
@@ -89,6 +85,7 @@ if (isAdmin) {
   });
 }
 
+/* ===== SEND ===== */
 window.sendMessage = function () {
   if (isScreen) return;
 
@@ -115,13 +112,44 @@ window.sendMessage = function () {
   msgInput.value = "";
 };
 
-/* admin 删除 */
+/* ===== admin 单条删除 ===== */
 function deleteMessage(key){
   if (!isAdmin) return;
   messagesRef.child(key).remove();
 }
 
-/* 渲染 */
+/* ===== admin 清空全部 ===== */
+function clearAllMessages(){
+  if (!isAdmin) return;
+
+  var ok = confirm("Are you sure to clear all messages and reset?");
+  if (!ok) return;
+
+  messagesRef.remove().then(function(){
+    alert("All messages have been deleted!");
+  });
+}
+
+/* ===== admin 注入按钮（一次） ===== */
+if (isAdmin) {
+  window.addEventListener("load", function(){
+    var ia = document.querySelector(".input-area");
+    if (!ia) return;
+
+    var btn = document.createElement("button");
+    btn.textContent = "Clear all messages";
+    btn.style.background = "#fff";
+    btn.style.color = "#000";
+    btn.style.padding = "12px 18px";
+    btn.style.marginRight = "12px";
+    btn.style.cursor = "pointer";
+    btn.onclick = clearAllMessages;
+
+    ia.insertBefore(btn, ia.firstChild);
+  });
+}
+
+/* ===== 渲染 ===== */
 messagesRef.limitToLast(100).on("child_added", snap => {
   var chat = document.getElementById("chat");
   if (!chat) return;
@@ -129,7 +157,6 @@ messagesRef.limitToLast(100).on("child_added", snap => {
 
   var d = snap.val();
   var key = snap.key;
-
   var color = getUserColor(d.name);
 
   var row = document.createElement("div");
