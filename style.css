@@ -14,7 +14,7 @@ body {
 /* ===== LEFT ===== */
 .left {
   width: 40%;
-  padding: 40px 60px 40px 50px;
+  padding: 36px 56px 36px 48px;
   border-right: 1px solid #222;
 }
 
@@ -22,14 +22,14 @@ body {
 .logo-wrap {
   display: flex;
   justify-content: center;
-  margin-bottom: 24px;
+  margin-bottom: 18px;
   perspective: 1000px;
 }
 
 .logo-wrap img {
-  width: 280px;
+  width: 340px;                 /* ⬅️ 更大 */
   transform-style: preserve-3d;
-  animation: spin3d 14s linear infinite, glow 4s ease-in-out infinite;
+  animation: spin3d 9s linear infinite, glow 4s ease-in-out infinite; /* ⬅️ 转更快 */
 }
 
 @keyframes spin3d {
@@ -53,30 +53,32 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 26px;
+  margin-bottom: 18px;
 }
 
 .center-group h1 {
-  font-size: 36px;
-  letter-spacing: 2px;
-  margin: 6px 0 22px;
+  font-size: 28px;              /* ⬅️ 缩小，保证一行 */
+  letter-spacing: 1.5px;
+  margin: 4px 0 12px;
   text-align: center;
+  white-space: nowrap;         /* ⬅️ 强制不换行 */
 }
 
 /* QR */
 .qr-wrap {
   display: flex;
   justify-content: center;
+  margin-top: -6px;             /* ⬅️ 整体上移 */
 }
 
 #qr {
-  width: 380px;
-  height: 380px;
+  width: 340px;                 /* 稍微放大但不压规则 */
+  height: 340px;
 }
 
 /* RULES */
 .rules {
-  margin-top: 22px;
+  margin-top: 18px;
   font-size: 14px;
   line-height: 1.6;
   color: #bbb;
@@ -106,13 +108,13 @@ body {
 /* CHAT */
 #chat {
   flex: 1;
-  padding: 50px 60px;
+  padding: 48px 56px;
   overflow-y: auto;
 }
 
 .msg {
   margin-bottom: 22px;
-  font-size: 24px;   /* 🔴 明显放大 */
+  font-size: 24px;
   line-height: 1.35;
 }
 
@@ -210,6 +212,7 @@ button {
 
   .center-group h1 {
     font-size: 24px;
+    white-space: normal;
   }
 
   .rules {
@@ -245,5 +248,4 @@ button {
     width: 100%;
   }
 }
-
 
