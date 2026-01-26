@@ -34,12 +34,34 @@ if (isScreen) {
   });
 }
 
-/* 冷却（admin 跳过） */
+/* ===== 用户名颜色系统 ===== */
+
+/* 亮色池（黑底专用，不重复轮换） */
+var COLOR_POOL = [
+  "#4da6ff", "#6cff9b", "#ffcf4d", "#ff6cf2",
+  "#6cffe7", "#ff6c6c", "#b36cff", "#6cffd1",
+  "#ffd36c", "#6ca8ff", "#ff9f6c", "#7dff6c"
+];
+
+var userColorMap = {};
+var colorIndex = 0;
+
+function getUserColor(name) {
+  if (name === "ADMIN") return "#ff3b3b"; // 🔴 admin 固定红
+
+  if (!userColorMap[name]) {
+    userColorMap[name] = COLOR_POOL[colorIndex % COLOR_POOL.length];
+    colorIndex++;
+  }
+  return userColorMap[name];
+}
+
+/* ===== 冷却（admin 跳过） ===== */
 var COOLDOWN = 15000;
 var lastSent = 0;
 
 /* 脏话 */
-var banned = ["fuck","shit","cibai","jibai","sohai","babi","puki","pukima","pukimak","cb","bodo","bodoh","bitch","asshole","cunt","nigga","retard"];
+var banned = ["fuck","shit","bitch","asshole","cunt","nigga","retard"];
 function hasBadWord(t){
   return banned.some(w => t.toLowerCase().includes(w));
 }
@@ -108,14 +130,20 @@ messagesRef.limitToLast(100).on("child_added", snap => {
   var d = snap.val();
   var key = snap.key;
 
+  var color = getUserColor(d.name);
+
   var row = document.createElement("div");
   row.className = "msg";
   row.dataset.key = key;
 
   row.innerHTML =
-    "<span class='user'>" + d.name + "</span>" +
+    "<span class='user' style='color:" + color + "'>" +
+    d.name +
+    "</span>" +
     d.message +
-    (isAdmin ? " <span class='del' onclick=\"deleteMessage('" + key + "')\">❌</span>" : "");
+    (isAdmin
+      ? " <span class='del' onclick=\"deleteMessage('" + key + "')\">❌</span>"
+      : "");
 
   chat.appendChild(row);
   chat.scrollTop = chat.scrollHeight;
