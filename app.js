@@ -16,13 +16,13 @@ var params   = new URLSearchParams(window.location.search);
 var isScreen = params.has("screen");
 var isAdmin  = params.has("admin");
 
-/* 屏幕模式隐藏输入 */
+/* screen 隐藏输入 */
 if (isScreen && !isAdmin) {
   var ia = document.querySelector(".input-area");
   if (ia) ia.style.display = "none";
 }
 
-/* QR（GitHub Pages 修正版） */
+/* QR（不动 screen） */
 var qrEl = document.getElementById("qr");
 if (qrEl && !isAdmin) {
   new QRious({
@@ -44,7 +44,7 @@ function hasBadWord(t){
   return bannedWords.some(w => t.includes(w));
 }
 
-/* 固定名字 */
+/* 锁名字 */
 var nameInput = document.getElementById("name");
 if (nameInput) {
   var savedName = localStorage.getItem("chat_name");
@@ -54,16 +54,16 @@ if (nameInput) {
   }
 }
 
-/* 发消息 */
+/* 发送消息 */
 function sendMessage(){
   if (isScreen && !isAdmin) return;
 
   var now = Date.now();
   if (now - lastSent < COOLDOWN) return;
 
-  var name = nameInput ? nameInput.value.trim() : "ADMIN";
+  var name = isAdmin ? "ADMIN" : nameInput.value.trim();
   var msgEl = document.getElementById("message");
-  var msg  = msgEl ? msgEl.value.trim() : "";
+  var msg = msgEl.value.trim();
 
   if (!name || !msg || msg.length > MAX_LEN) return;
   if (hasBadWord(msg)) return;
@@ -73,24 +73,50 @@ function sendMessage(){
 
   messagesRef.push({ name: name, message: msg, time: now });
   lastSent = now;
-
-  if (msgEl) msgEl.value = "";
+  msgEl.value = "";
 }
 
 /* 渲染消息 */
 messagesRef.limitToLast(100).on("child_added", snap => {
   var data = snap.val();
+  var key  = snap.key;
+
+  /* 手机端：完全不显示聊天记录 */
+  if (!isAdmin && !isScreen) return;
+
   var chat = document.getElementById("chat");
   if (!chat) return;
 
   var row = document.createElement("div");
   row.className = "msg";
-  row.innerHTML = "<span class='user'>" + data.name + "</span>" + data.message;
+  row.id = key;
+
+  row.innerHTML =
+    "<span class='user'>" + data.name + "</span>" +
+    data.message;
+
+  /* admin 删除按钮 */
+  if (isAdmin) {
+    var del = document.createElement("button");
+    del.textContent = "❌";
+    del.style.marginLeft = "10px";
+    del.onclick = function(){
+      messagesRef.child(key).remove();
+    };
+    row.appendChild(del);
+  }
+
   chat.appendChild(row);
   chat.scrollTop = chat.scrollHeight;
 });
 
-/* 清屏（只有 admin） */
+/* 实时移除（admin 删后不用刷新） */
+messagesRef.on("child_removed", snap => {
+  var el = document.getElementById(snap.key);
+  if (el) el.remove();
+});
+
+/* 清屏（admin only） */
 function clearChat(){
   if (!isAdmin) return;
   if (confirm("Clear all messages?")) {

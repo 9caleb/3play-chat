@@ -40,12 +40,15 @@
   <!-- RIGHT -->
   <div class="right">
 
+    <!-- CHAT (screen + admin only, JS 会控制) -->
     <div id="chat"></div>
 
+    <!-- INPUT -->
     <div class="input-area">
       <div class="name-wrap">
         <input id="name" placeholder="Enter your name (one time only)">
         <div class="name-hint">Name can only be set once</div>
+        <div class="name-hint">You can only send a message every 30 seconds</div>
       </div>
 
       <textarea id="message" placeholder="Type your message (max 80 chars)"></textarea>
@@ -56,21 +59,23 @@
 
 </div>
 
-<!-- ADMIN FLOAT -->
+<!-- ADMIN CLEAR BUTTON -->
 <button id="admin-clear-btn" onclick="clearChat()">CLEAR ALL</button>
 
+<!-- LIBS -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 <script src="app.js"></script>
 
+<!-- ADMIN ONLY UI -->
 <script>
   if (!new URLSearchParams(window.location.search).has("admin")) {
-    document.getElementById("admin-clear-btn").style.display = "none";
+    var btn = document.getElementById("admin-clear-btn");
+    if (btn) btn.style.display = "none";
   }
 </script>
 
 </body>
 </html>
-
 
