@@ -12,6 +12,8 @@ var params = new URLSearchParams(window.location.search);
 var isScreen = params.has("screen");
 var isAdmin  = params.has("admin");
 
+if (isScreen) document.body.classList.add("screen");
+
 /* screen 不显示输入 */
 if (isScreen) {
   var ia = document.querySelector(".input-area");
