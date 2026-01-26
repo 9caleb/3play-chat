@@ -1,102 +1,95 @@
-let db, ref;
-const BAD = ["fuck","shit","babi","anjing","cibai"];
-const COOLDOWN = 30000;
-let lastSent = 0;
+cat << 'EOF' > app.js
+var firebaseConfig = {
+  apiKey: "AIzaSyBMoeGpRpLb8Ooh47WIlKCrCPC7ocZ2ZUo",
+  authDomain: "play-chatbox.firebaseapp.com",
+  databaseURL: "https://play-chatbox-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "play-chatbox",
+  storageBucket: "play-chatbox.firebasestorage.app",
+  messagingSenderId: "822745508232",
+  appId: "1:822745508232:web:20b6baa7e4929668db723d"
+};
 
-function initFirebase(){
-  firebase.initializeApp({
-    apiKey: "AIzaSyBMoeGpRpLb8Ooh47WIlKCrCPC7ocZ2ZUo",
-    authDomain: "play-chatbox.firebaseapp.com",
-    databaseURL: "https://play-chatbox-default-rtdb.asia-southeast1.firebasedatabase.app",
-    projectId: "play-chatbox"
-  });
-  db = firebase.database();
-  ref = db.ref("messages");
+firebase.initializeApp(firebaseConfig);
+var db = firebase.database();
+var messagesRef = db.ref("messages");
+
+var params   = new URLSearchParams(window.location.search);
+var isScreen = params.has("screen");
+var isAdmin  = params.has("admin");
+
+/* 屏幕模式隐藏输入 */
+if (isScreen) {
+  var ia = document.querySelector(".input-area");
+  if (ia) ia.style.display = "none";
 }
 
-function listen(render){
-  ref.limitToLast(100).on("child_added", s=>render(s.key, s.val()));
-  ref.on("child_removed", s=>{
-    const el=document.getElementById(s.key);
-    if(el) el.remove();
-  });
-}
-
-function filterMsg(m){
-  let x=m;
-  BAD.forEach(w=>x=x.replace(new RegExp(w,"gi"),"***"));
-  return x;
-}
-
-/* SCREEN */
-function initScreen(){
+/* QR */
+if (!isAdmin) {
   new QRious({
     element: document.getElementById("qr"),
-    size: 300,
-    value: location.origin + "/index.html"
-  });
-  const chat=document.getElementById("chat");
-  listen((k,d)=>{
-    const div=document.createElement("div");
-    div.className="msg";
-    div.id=k;
-    div.innerHTML=`<span class="user">${d.name}</span>${d.message}`;
-    chat.appendChild(div);
-    chat.scrollTop=chat.scrollHeight;
+    value: window.location.origin + window.location.pathname,
+    size: 320
   });
 }
 
-/* ADMIN */
-function initAdmin(){
-  const chat=document.getElementById("chat");
-  const send=document.getElementById("sendBtn");
-  const clear=document.getElementById("clearBtn");
-  const msg=document.getElementById("message");
+/* 防刷屏 */
+var lastSent = 0;
+var COOLDOWN = 30000;
+var MAX_LEN  = 80;
 
-  listen((k,d)=>{
-    const div=document.createElement("div");
-    div.className="msg";
-    div.id=k;
-    div.innerHTML=`<span class="user">${d.name}</span>${d.message}
-      <button class="x">❌</button>`;
-    div.querySelector(".x").onclick=()=>ref.child(k).remove();
-    chat.appendChild(div);
-  });
-
-  send.onclick=()=>{
-    if(!msg.value.trim()) return;
-    ref.push({name:"ADMIN", message:filterMsg(msg.value.trim())});
-    msg.value="";
-  };
-
-  clear.onclick=()=>{
-    if(confirm("Are you sure to delete all the messages and reset?")){
-      ref.remove();
-    }
-  };
+/* 脏话过滤 */
+var bannedWords = ["fuck","shit","bitch","asshole","cunt","nigger","retard"];
+function hasBadWord(t){
+  t = t.toLowerCase();
+  return bannedWords.some(w => t.includes(w));
 }
 
-/* MOBILE */
-function initMobile(){
-  const name=document.getElementById("name");
-  const msg=document.getElementById("message");
-  const send=document.getElementById("sendBtn");
+/* 固定名字 */
+var nameInput = document.getElementById("name");
+var savedName = localStorage.getItem("chat_name");
+if (savedName && nameInput) {
+  nameInput.value = savedName;
+  nameInput.disabled = true;
+}
 
-  if(localStorage.name){
-    name.value=localStorage.name;
-    name.disabled=true;
+/* 发消息 */
+function sendMessage(){
+  if (isScreen) return;
+
+  var now = Date.now();
+  if (now - lastSent < COOLDOWN) return;
+
+  var name = nameInput.value.trim();
+  var msg  = document.getElementById("message").value.trim();
+  if (!name || !msg || msg.length > MAX_LEN) return;
+  if (hasBadWord(msg)) return;
+
+  localStorage.setItem("chat_name", name);
+  nameInput.disabled = true;
+
+  messagesRef.push({ name, message: msg, time: now });
+  lastSent = now;
+  document.getElementById("message").value = "";
+}
+
+/* 渲染消息 */
+messagesRef.limitToLast(100).on("child_added", snap => {
+  var data = snap.val();
+  var row = document.createElement("div");
+  row.className = "msg";
+  row.innerHTML = "<span class='user'>" + data.name + "</span>" + data.message;
+  document.getElementById("chat").appendChild(row);
+});
+
+/* 清屏（只有 admin 才生效） */
+function clearChat(){
+  if (!isAdmin) {
+    alert("Admin only");
+    return;
   }
-
-  send.onclick=()=>{
-    if(!name.value||!msg.value) return;
-    if(Date.now()-lastSent<COOLDOWN) return;
-
-    localStorage.name=name.value;
-    name.disabled=true;
-
-    ref.push({name:name.value, message:filterMsg(msg.value)});
-    msg.value="";
-    lastSent=Date.now();
-  };
+  if (confirm("Clear all messages?")) {
+    messagesRef.remove();
+  }
 }
+EOF
 

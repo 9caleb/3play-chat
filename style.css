@@ -1,40 +1,249 @@
-body{margin:0;background:#050508;color:#fff;font-family:Arial}
-.layout{display:flex;height:100vh}
-
-.left{width:40%;padding:40px;border-right:1px solid #222}
-.right{width:60%;display:flex;flex-direction:column}
-
-.logo-wrap{display:flex;justify-content:center;margin-bottom:20px}
-.logo-wrap img{width:280px;animation:spin 10s linear infinite}
-.logo-wrap.big img{width:360px}
-
-@keyframes spin{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
-
-.title{text-align:center;margin:10px 0 20px}
-#qr{display:block;margin:0 auto 20px}
-
-.rules{font-size:14px;color:#ccc}
-.rules p{margin:4px 0}
-
-#chat{flex:1;padding:40px;overflow-y:auto}
-.msg{font-size:24px;margin-bottom:14px}
-.user{color:#4da6ff;margin-right:8px}
-.x{margin-left:10px;color:red;background:none;border:1px solid red}
-
-.input-area{border-top:1px solid #222;padding:20px}
-.admin-input textarea{height:140px}
-
-input,textarea,button{width:100%;padding:14px;margin-bottom:10px;font-size:16px}
-button{background:#fff;color:#000;border:none;font-weight:bold}
-button.danger{background:red;color:#fff}
-
-.btn-row{display:flex;gap:10px}
-
-.mobile{padding:20px}
-.mobile #chat,.mobile #qr{display:none}
-
-@media(max-width:900px){
-  .layout{flex-direction:column}
-  .left,.right{width:100%}
+/* ===== BASE ===== */
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #0e0e14 0%, #050508 65%);
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial;
 }
+
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* ===== LEFT ===== */
+.left {
+  width: 40%;
+  padding: 40px 60px 40px 50px;
+  border-right: 1px solid #222;
+}
+
+/* LOGO */
+.logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+  perspective: 1000px;
+}
+
+.logo-wrap img {
+  width: 280px;
+  transform-style: preserve-3d;
+  animation: spin3d 14s linear infinite, glow 4s ease-in-out infinite;
+}
+
+@keyframes spin3d {
+  from { transform: rotateY(0deg) rotateX(10deg); }
+  to   { transform: rotateY(360deg) rotateX(10deg); }
+}
+
+@keyframes glow {
+  0%,100% {
+    filter: drop-shadow(0 0 14px rgba(120,200,255,0.4))
+            drop-shadow(0 0 32px rgba(120,200,255,0.2));
+  }
+  50% {
+    filter: drop-shadow(0 0 26px rgba(120,200,255,0.85))
+            drop-shadow(0 0 54px rgba(120,200,255,0.45));
+  }
+}
+
+/* HERO */
+.center-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 26px;
+}
+
+.center-group h1 {
+  font-size: 36px;
+  letter-spacing: 2px;
+  margin: 6px 0 22px;
+  text-align: center;
+}
+
+/* QR */
+.qr-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+#qr {
+  width: 380px;
+  height: 380px;
+}
+
+/* RULES */
+.rules {
+  margin-top: 22px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #bbb;
+}
+
+.rules p {
+  margin: 6px 0;
+}
+
+.rules .enjoy {
+  margin-top: 14px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.rules .enjoy span {
+  color: #4da6ff;
+}
+
+/* ===== RIGHT ===== */
+.right {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* CHAT */
+#chat {
+  flex: 1;
+  padding: 50px 60px;
+  overflow-y: auto;
+}
+
+.msg {
+  margin-bottom: 22px;
+  font-size: 24px;   /* 🔴 明显放大 */
+  line-height: 1.35;
+}
+
+.msg .user {
+  color: #4da6ff;
+  margin-right: 12px;
+  font-weight: 700;
+}
+
+/* INPUT */
+.input-area {
+  padding: 34px 40px;
+  border-top: 1px solid #222;
+  display: flex;
+  gap: 18px;
+  align-items: flex-start;
+}
+
+.name-wrap {
+  width: 240px;
+}
+
+.name-hint {
+  font-size: 12px;
+  color: #888;
+  margin-top: 6px;
+}
+
+input {
+  width: 100%;
+  padding: 16px;
+  font-size: 16px;
+  background: #0f0f14;
+  border: 1px solid #222;
+  color: #fff;
+}
+
+textarea {
+  flex: 1;
+  min-height: 150px;
+  padding: 16px;
+  font-size: 18px;
+  background: #0f0f14;
+  border: 1px solid #222;
+  color: #fff;
+  resize: none;
+}
+
+button {
+  background: linear-gradient(135deg, #4da6ff, #6c7bff);
+  border: none;
+  padding: 18px 34px;
+  font-size: 16px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ADMIN */
+#admin-clear-btn {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 9999;
+  background: linear-gradient(135deg, #ff4d4d, #ff1f1f);
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  padding: 16px 26px;
+  font-size: 14px;
+  font-weight: 700;
+  box-shadow: 0 0 18px rgba(255,77,77,0.5);
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 900px) {
+
+  .layout {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .left {
+    width: 100%;
+    border-right: none;
+    padding: 24px 20px 10px;
+  }
+
+  .qr-wrap {
+    display: none;
+  }
+
+  .logo-wrap img {
+    width: 180px;
+  }
+
+  .center-group h1 {
+    font-size: 24px;
+  }
+
+  .rules {
+    font-size: 12px;
+  }
+
+  .right {
+    width: 100%;
+  }
+
+  #chat {
+    padding: 22px;
+  }
+
+  .msg {
+    font-size: 18px;
+  }
+
+  .input-area {
+    flex-direction: column;
+    padding: 20px;
+  }
+
+  .name-wrap {
+    width: 100%;
+  }
+
+  textarea {
+    min-height: 160px;
+  }
+
+  button {
+    width: 100%;
+  }
+}
+
 
