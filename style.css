@@ -1,21 +1,152 @@
-/* ===== 保留你现有的全部 desktop / screen 样式不变 ===== */
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #0e0e14 0%, #050508 65%);
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+}
 
-/* ===== MOBILE ===== */
+.layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* LEFT */
+.left {
+  width: 40%;
+  padding: 40px 60px 40px 50px;
+  border-right: 1px solid #222;
+}
+
+.logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+  perspective: 1000px;
+}
+
+.logo-wrap img {
+  width: 280px;
+  transform-style: preserve-3d;
+  animation: spin3d 10s linear infinite;
+}
+
+@keyframes spin3d {
+  from { transform: rotateY(0deg) rotateX(10deg); }
+  to   { transform: rotateY(360deg) rotateX(10deg); }
+}
+
+.center-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.center-group h1 {
+  font-size: 30px;
+  margin: 10px 0 16px;
+  text-align: center;
+}
+
+.qr-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+#qr {
+  width: 360px;
+  height: 360px;
+}
+
+.rules {
+  margin-top: 18px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #bbb;
+}
+
+.rules .enjoy {
+  margin-top: 10px;
+  color: #fff;
+}
+
+/* RIGHT */
+.right {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+}
+
+#chat {
+  flex: 1;
+  padding: 50px 60px;
+  overflow-y: auto;
+}
+
+.msg {
+  font-size: 24px;
+  margin-bottom: 18px;
+}
+
+.msg .user {
+  color: #4da6ff;
+  margin-right: 10px;
+  font-weight: bold;
+}
+
+.input-area {
+  padding: 24px 40px;
+  border-top: 1px solid #222;
+  display: flex;
+  gap: 16px;
+}
+
+.name-wrap {
+  width: 240px;
+}
+
+.name-hint {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+input {
+  width: 100%;
+  padding: 14px;
+  background: #0f0f14;
+  border: 1px solid #222;
+  color: #fff;
+}
+
+textarea {
+  flex: 1;
+  min-height: 140px;
+  padding: 14px;
+  background: #0f0f14;
+  border: 1px solid #222;
+  color: #fff;
+}
+
+button {
+  background: linear-gradient(135deg, #4da6ff, #6c7bff);
+  border: none;
+  padding: 16px 30px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* MOBILE */
 @media (max-width: 900px) {
 
   .layout {
     flex-direction: column;
-    height: auto;
+    height: 100vh;
   }
 
   .left {
     width: 100%;
+    padding: 20px;
     border-right: none;
-    padding: 20px 18px 8px; /* 缩短高度 */
-  }
-
-  .qr-wrap {
-    display: none;
   }
 
   .logo-wrap img {
@@ -24,20 +155,16 @@
 
   .center-group h1 {
     font-size: 22px;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
+  }
+
+  .qr-wrap {
+    display: none;
   }
 
   .rules {
     font-size: 12px;
-    margin-bottom: 8px; /* 🔴 关键：缩短 rules 到 input 的距离 */
-  }
-
-  .rules p {
-    margin: 3px 0;
-  }
-
-  .rules .enjoy {
-    margin-top: 6px;
+    margin-bottom: 10px;
   }
 
   .right {
@@ -45,34 +172,23 @@
   }
 
   #chat {
-    display: none; /* 手机不显示聊天记录 */
+    display: none;
   }
 
   .input-area {
     flex-direction: column;
-    padding: 14px 18px 18px;
+    padding: 16px;
     gap: 10px;
   }
 
-  .name-wrap {
-    width: 100%;
-  }
-
-  input {
-    width: 100%;
-  }
-
   textarea {
-    width: 100%;
-    min-height: 80px; /* 🔴 原来一半 */
-    font-size: 16px;
+    min-height: 80px;
   }
 
   button {
     width: 100%;
-    background: #ffffff;   /* 白底 */
-    color: #000000;        /* 黑字 */
-    font-weight: 700;
+    background: #fff;
+    color: #000;
   }
 }
 

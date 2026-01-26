@@ -1,51 +1,53 @@
-var firebaseConfig = {
+firebase.initializeApp({
   apiKey: "AIzaSyBMoeGpRpLb8Ooh47WIlKCrCPC7ocZ2ZUo",
   authDomain: "play-chatbox.firebaseapp.com",
   databaseURL: "https://play-chatbox-default-rtdb.asia-southeast1.firebasedatabase.app",
   projectId: "play-chatbox"
-};
+});
 
-firebase.initializeApp(firebaseConfig);
 var db = firebase.database();
 var messagesRef = db.ref("messages");
 
-var params   = new URLSearchParams(window.location.search);
+var params = new URLSearchParams(window.location.search);
 var isScreen = params.has("screen");
 var isAdmin  = params.has("admin");
 
-/* screen 隐藏输入 */
-if (isScreen && !isAdmin) {
+/* screen 不显示输入 */
+if (isScreen) {
   var ia = document.querySelector(".input-area");
   if (ia) ia.style.display = "none";
 }
 
 /* QR */
-var qrEl = document.getElementById("qr");
-if (qrEl && !isAdmin) {
+if (!isAdmin && !isScreen) {
   new QRious({
-    element: qrEl,
-    value: location.href.split("?")[0],
+    element: document.getElementById("qr"),
+    value: window.location.origin + window.location.pathname,
     size: 320
   });
 }
 
 /* 冷却 */
-var lastSent = 0;
 var COOLDOWN = 15000;
+var lastSent = 0;
 
-/* 锁名字 */
-var nameInput = document.getElementById("name");
-if (nameInput) {
-  var savedName = localStorage.getItem("chat_name");
-  if (savedName) {
-    nameInput.value = savedName;
-    nameInput.disabled = true;
-  }
+/* 脏话 */
+var banned = ["fuck","shit","bitch","asshole","cunt","nigger","retard"];
+function hasBadWord(t){
+  t = t.toLowerCase();
+  return banned.some(w => t.includes(w));
 }
 
-/* 发送 */
+/* 名字锁定 */
+var nameInput = document.getElementById("name");
+var saved = localStorage.getItem("chat_name");
+if (saved && nameInput) {
+  nameInput.value = saved;
+  nameInput.disabled = true;
+}
+
 function sendMessage(){
-  if (isScreen && !isAdmin) return;
+  if (isScreen) return;
 
   var now = Date.now();
   if (now - lastSent < COOLDOWN) {
@@ -53,41 +55,31 @@ function sendMessage(){
     return;
   }
 
-  var name = isAdmin ? "ADMIN" : nameInput.value.trim();
-  var msgEl = document.getElementById("message");
-  var msg = msgEl.value.trim();
-
+  var name = nameInput.value.trim();
+  var msg  = document.getElementById("message").value.trim();
   if (!name || !msg) return;
+  if (hasBadWord(msg)) return;
 
   localStorage.setItem("chat_name", name);
-  if (nameInput) nameInput.disabled = true;
+  nameInput.disabled = true;
 
-  messagesRef.push({ name: name, message: msg, time: now });
+  messagesRef.push({ name: name, message: msg });
+  document.getElementById("message").value = "";
   lastSent = now;
-  msgEl.value = "";
 
   alert("Message successfully sent!");
 }
 
-/* 渲染（admin + screen） */
+/* render（screen / admin 用） */
 messagesRef.limitToLast(100).on("child_added", snap => {
-  if (!isAdmin && !isScreen) return;
-
-  var data = snap.val();
   var chat = document.getElementById("chat");
   if (!chat) return;
 
+  var d = snap.val();
   var row = document.createElement("div");
   row.className = "msg";
-  row.innerHTML = "<span class='user'>" + data.name + "</span>" + data.message;
+  row.innerHTML = "<span class='user'>" + d.name + "</span>" + d.message;
   chat.appendChild(row);
+  chat.scrollTop = chat.scrollHeight;
 });
-
-/* 清屏 */
-function clearChat(){
-  if (!isAdmin) return;
-  if (confirm("Clear all messages?")) {
-    messagesRef.remove();
-  }
-}
 
