@@ -1,21 +1,40 @@
-body{margin:0;background:#000;color:#fff;font-family:Arial}
-.logo{text-align:center;font-size:42px}
-.big{font-size:80px}
-.rules p{margin:6px 0}
+body{margin:0;background:#050508;color:#fff;font-family:Arial}
+.layout{display:flex;height:100vh}
 
-input,textarea,button{
-  width:100%;padding:16px;margin:10px 0;font-size:16px
-}
-button{background:#000;color:#fff;border:2px solid #fff}
+.left{width:40%;padding:40px;border-right:1px solid #222}
+.right{width:60%;display:flex;flex-direction:column}
+
+.logo-wrap{display:flex;justify-content:center;margin-bottom:20px}
+.logo-wrap img{width:280px;animation:spin 10s linear infinite}
+.logo-wrap.big img{width:360px}
+
+@keyframes spin{from{transform:rotateY(0)}to{transform:rotateY(360deg)}}
+
+.title{text-align:center;margin:10px 0 20px}
+#qr{display:block;margin:0 auto 20px}
+
+.rules{font-size:14px;color:#ccc}
+.rules p{margin:4px 0}
+
+#chat{flex:1;padding:40px;overflow-y:auto}
+.msg{font-size:24px;margin-bottom:14px}
+.user{color:#4da6ff;margin-right:8px}
+.x{margin-left:10px;color:red;background:none;border:1px solid red}
+
+.input-area{border-top:1px solid #222;padding:20px}
+.admin-input textarea{height:140px}
+
+input,textarea,button{width:100%;padding:14px;margin-bottom:10px;font-size:16px}
+button{background:#fff;color:#000;border:none;font-weight:bold}
+button.danger{background:red;color:#fff}
+
+.btn-row{display:flex;gap:10px}
 
 .mobile{padding:20px}
-.admin{padding:20px}
-#chat div{margin:8px 0}
+.mobile #chat,.mobile #qr{display:none}
 
-.screen{display:flex;height:100vh}
-.screen-left{width:40%;padding:40px}
-.screen-right{width:60%;padding:40px;overflow-y:auto}
-
-.msg{font-size:26px;margin-bottom:16px}
-.msg .user{color:#4da6ff;margin-right:10px}
+@media(max-width:900px){
+  .layout{flex-direction:column}
+  .left,.right{width:100%}
+}
 

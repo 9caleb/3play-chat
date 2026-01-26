@@ -7,25 +7,32 @@
 </head>
 <body class="screen">
 
-<div class="screen-left">
-  <h1 class="logo big">3PLAY</h1>
-  <h2>START CHATTING NOW</h2>
-  <canvas id="qr"></canvas>
+<div class="layout">
+  <div class="left">
+    <div class="logo-wrap big">
+      <img src="3PLAY logo design.png">
+    </div>
 
-  <div class="rules">
-    <p>🪪 Name once only</p>
-    <p>🤝 Be respectful</p>
-    <p>🚫 No spamming</p>
+    <h1 class="title">START CHATTING NOW</h1>
+    <canvas id="qr"></canvas>
+
+    <div class="rules">
+      <p>🪪 Name once only</p>
+      <p>🤝 Be respectful</p>
+      <p>🚫 No spamming</p>
+      <p>📺 Messages appear live on screen</p>
+    </div>
+  </div>
+
+  <div class="right">
+    <div id="chat"></div>
   </div>
 </div>
-
-<div class="screen-right" id="chat"></div>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 <script src="app.js"></script>
-
 <script>
 initFirebase();
 initScreen();

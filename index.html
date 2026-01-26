@@ -8,23 +8,25 @@
 </head>
 <body class="mobile">
 
-<h1 class="logo">3PLAY</h1>
+<div class="logo-wrap">
+  <img src="3PLAY logo design.png">
+</div>
+
+<h1 class="title">START CHATTING NOW</h1>
 
 <div class="rules">
-  <p>🪪 Name can be entered once only</p>
+  <p>🪪 Name once only</p>
   <p>🤝 Be respectful</p>
   <p>🚫 No spamming</p>
-  <p>🎉 Enjoy the party! #PLAYwithme</p>
 </div>
 
 <input id="name" placeholder="Your name (one time only)">
 <textarea id="message" placeholder="Type your message"></textarea>
-<button id="send">SEND</button>
+<button id="sendBtn">SEND</button>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script src="app.js"></script>
-
 <script>
 initFirebase();
 initMobile();
