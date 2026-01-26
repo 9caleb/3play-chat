@@ -41,12 +41,6 @@ body {
   align-items: center;
 }
 
-.center-group h1 {
-  font-size: 30px;
-  margin: 10px 0 16px;
-  text-align: center;
-}
-
 .qr-wrap {
   display: flex;
   justify-content: center;
@@ -98,6 +92,7 @@ body {
   border-top: 1px solid #222;
   display: flex;
   gap: 16px;
+  align-items: flex-start;
 }
 
 .name-wrap {
@@ -108,6 +103,7 @@ body {
   font-size: 12px;
   color: #aaa;
   margin-top: 4px;
+  white-space: nowrap;
 }
 
 input {
@@ -120,11 +116,12 @@ input {
 
 textarea {
   flex: 1;
-  min-height: 140px;
+  min-height: 150px;
   padding: 14px;
   background: #0f0f14;
   border: 1px solid #222;
   color: #fff;
+  resize: none;
 }
 
 button {
@@ -133,6 +130,20 @@ button {
   padding: 16px 30px;
   font-weight: bold;
   cursor: pointer;
+}
+
+/* ADMIN */
+body.admin .name-wrap {
+  width: 200px;
+}
+
+body.admin textarea {
+  min-height: 140px;
+}
+
+body.admin button {
+  width: auto;
+  padding: 16px 26px;
 }
 
 /* MOBILE */
@@ -156,9 +167,11 @@ button {
   .center-group h1 {
     font-size: 22px;
     margin-bottom: 8px;
+    white-space: nowrap;
   }
 
   .qr-wrap {
+    display: none !important;
   }
 
   .rules {
@@ -180,23 +193,16 @@ button {
     gap: 10px;
   }
 
+  .name-wrap {
+    width: 100%;
+  }
+
   textarea {
     min-height: 80px;
   }
 
   button {
     width: 100%;
-    background: #fff;
-    color: #000;
-  }
-}
-
-  textarea {
-    min-height: 80px;
-  }
-    
-  button {
-    width: 100%;  
     background: #fff;
     color: #000;
   }

@@ -1,4 +1,3 @@
-// ===== FIREBASE =====
 firebase.initializeApp({
   apiKey: "AIzaSyBMoeGpRpLb8Ooh47WIlKCrCPC7ocZ2ZUo",
   authDomain: "play-chatbox.firebaseapp.com",
@@ -9,26 +8,24 @@ firebase.initializeApp({
 var db = firebase.database();
 var messagesRef = db.ref("messages");
 
-// ===== MODE =====
 var params   = new URLSearchParams(window.location.search);
 var isScreen = params.has("screen");
 var isAdmin  = params.has("admin");
 
-// 标记 screen（给 CSS 用）
 if (isScreen) document.body.classList.add("screen");
+if (isAdmin)  document.body.classList.add("admin");
 
-// ===== SCREEN 不显示输入 =====
+/* screen 不显示输入 */
 if (isScreen) {
   var ia = document.querySelector(".input-area");
   if (ia) ia.style.display = "none";
 }
 
-// ===== QR（只给客人 & screen，admin 不要）=====
-if (!isAdmin) {
+/* ===== QR：只给 screen ===== */
+if (isScreen) {
   window.addEventListener("load", function () {
     var qr = document.getElementById("qr");
     if (!qr) return;
-
     new QRious({
       element: qr,
       value: window.location.origin + window.location.pathname,
@@ -37,21 +34,18 @@ if (!isAdmin) {
   });
 }
 
-// ===== 冷却 & 限制 =====
+/* 冷却 */
 var COOLDOWN = 15000;
 var lastSent = 0;
-var MAX_LEN  = 80;
 
-// ===== 脏话过滤 =====
+/* 脏话 */
 var banned = ["fuck","shit","bitch","asshole","cunt","nigga","retard"];
 function hasBadWord(t){
-  t = t.toLowerCase();
-  return banned.some(w => t.includes(w));
+  return banned.some(w => t.toLowerCase().includes(w));
 }
 
-// ===== 名字锁定 =====
+/* 名字 */
 var nameInput = document.getElementById("name");
-
 if (isAdmin && nameInput) {
   nameInput.value = "ADMIN";
   nameInput.disabled = true;
@@ -63,7 +57,6 @@ if (isAdmin && nameInput) {
   }
 }
 
-// ===== 发送消息 =====
 window.sendMessage = function () {
   if (isScreen) return;
 
@@ -73,60 +66,55 @@ window.sendMessage = function () {
     return;
   }
 
-  var name = nameInput ? nameInput.value.trim() : "";
-  var msg  = document.getElementById("message").value.trim();
-
+  var msgInput = document.getElementById("message");
+  var msg = msgInput.value.trim();
+  var name = nameInput.value.trim();
   if (!name || !msg) return;
-  if (msg.length > MAX_LEN) return;
   if (hasBadWord(msg)) return;
 
   if (!isAdmin) {
     localStorage.setItem("chat_name", name);
-    if (nameInput) nameInput.disabled = true;
+    nameInput.disabled = true;
   }
 
-  messagesRef.push({
-    name: name,
-    message: msg,
-    time: now
-  });
-
-  document.getElementById("message").value = "";
+  messagesRef.push({ name, message: msg });
+  msgInput.value = "";
   lastSent = now;
 
   alert("Message successfully sent!");
 };
 
-// ===== 删除单条（admin）=====
+/* 删除（admin） */
 function deleteMessage(key){
   if (!isAdmin) return;
   messagesRef.child(key).remove();
 }
 
-// ===== 渲染消息 =====
+/* 新消息 */
 messagesRef.limitToLast(100).on("child_added", snap => {
   var chat = document.getElementById("chat");
   if (!chat) return;
+  if (!isScreen && !isAdmin) return; // 手机不显示历史
 
-  // 手机端不显示历史
-  if (!isScreen && !isAdmin) return;
-
-  var d   = snap.val();
+  var d = snap.val();
   var key = snap.key;
 
   var row = document.createElement("div");
   row.className = "msg";
+  row.dataset.key = key;
 
-  var html = "<span class='user'>" + d.name + "</span>" + d.message;
+  row.innerHTML =
+    "<span class='user'>" + d.name + "</span>" +
+    d.message +
+    (isAdmin ? " <span class='del' onclick=\"deleteMessage('" + key + "')\">✕</span>" : "");
 
-  if (isAdmin) {
-    html +=
-      " <span style='color:#ff4d4d;cursor:pointer;margin-left:10px' " +
-      "onclick=\"deleteMessage('" + key + "')\">✕</span>";
-  }
-
-  row.innerHTML = html;
   chat.appendChild(row);
   chat.scrollTop = chat.scrollHeight;
+});
+
+/* 删除即时反映 */
+messagesRef.on("child_removed", snap => {
+  var el = document.querySelector(".msg[data-key='" + snap.key + "']");
+  if (el) el.remove();
 });
 
