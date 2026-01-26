@@ -10,15 +10,11 @@
 
 <div class="layout">
 
-  <!-- LEFT -->
   <div class="left">
-
-    <!-- LOGO -->
     <div class="logo-wrap">
       <img src="3PLAY logo design.png" alt="3PLAY Logo">
     </div>
 
-    <!-- HERO -->
     <div class="center-group">
       <h1>START CHATTING NOW</h1>
       <div class="qr-wrap">
@@ -26,7 +22,6 @@
       </div>
     </div>
 
-    <!-- RULES -->
     <div class="rules">
       <p>🪪 Your name can be entered once only and cannot be changed</p>
       <p>🤝 Be respectful. No rude or offensive words</p>
@@ -34,45 +29,35 @@
       <p>📺 Messages appear live on screen</p>
       <p class="enjoy">🎉 Enjoy the party! <span>#PLAYwithme</span></p>
     </div>
-
   </div>
 
-  <!-- RIGHT -->
   <div class="right">
-
-    <!-- CHAT (screen + admin only, JS 会控制) -->
     <div id="chat"></div>
 
-    <!-- INPUT -->
     <div class="input-area">
       <div class="name-wrap">
         <input id="name" placeholder="Enter your name (one time only)">
         <div class="name-hint">Name can only be set once</div>
-        <div class="name-hint">You can only send a message every 30 seconds</div>
+        <div class="name-hint">You can only send a message every 15 seconds</div>
       </div>
 
-      <textarea id="message" placeholder="Type your message (max 80 chars)"></textarea>
+      <textarea id="message" placeholder="Type your message"></textarea>
       <button onclick="sendMessage()">SEND</button>
     </div>
-
   </div>
 
 </div>
 
-<!-- ADMIN CLEAR BUTTON -->
 <button id="admin-clear-btn" onclick="clearChat()">CLEAR ALL</button>
 
-<!-- LIBS -->
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 <script src="app.js"></script>
 
-<!-- ADMIN ONLY UI -->
 <script>
   if (!new URLSearchParams(window.location.search).has("admin")) {
-    var btn = document.getElementById("admin-clear-btn");
-    if (btn) btn.style.display = "none";
+    document.getElementById("admin-clear-btn").style.display = "none";
   }
 </script>
 

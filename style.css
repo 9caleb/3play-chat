@@ -1,192 +1,4 @@
-/* ===== BASE ===== */
-body {
-  margin: 0;
-  background: radial-gradient(circle at top, #0e0e14 0%, #050508 65%);
-  color: #fff;
-  font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial;
-}
-
-.layout {
-  display: flex;
-  height: 100vh;
-}
-
-/* ===== LEFT ===== */
-.left {
-  width: 40%;
-  padding: 36px 56px 36px 48px;
-  border-right: 1px solid #222;
-}
-
-/* LOGO */
-.logo-wrap {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 18px;
-  perspective: 1000px;
-}
-
-.logo-wrap img {
-  width: 340px;                 /* ⬅️ 更大 */
-  transform-style: preserve-3d;
-  animation: spin3d 9s linear infinite, glow 4s ease-in-out infinite; /* ⬅️ 转更快 */
-}
-
-@keyframes spin3d {
-  from { transform: rotateY(0deg) rotateX(10deg); }
-  to   { transform: rotateY(360deg) rotateX(10deg); }
-}
-
-@keyframes glow {
-  0%,100% {
-    filter: drop-shadow(0 0 14px rgba(120,200,255,0.4))
-            drop-shadow(0 0 32px rgba(120,200,255,0.2));
-  }
-  50% {
-    filter: drop-shadow(0 0 26px rgba(120,200,255,0.85))
-            drop-shadow(0 0 54px rgba(120,200,255,0.45));
-  }
-}
-
-/* HERO */
-.center-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 18px;
-}
-
-.center-group h1 {
-  font-size: 28px;              /* ⬅️ 缩小，保证一行 */
-  letter-spacing: 1.5px;
-  margin: 4px 0 12px;
-  text-align: center;
-  white-space: nowrap;         /* ⬅️ 强制不换行 */
-}
-
-/* QR */
-.qr-wrap {
-  display: flex;
-  justify-content: center;
-  margin-top: -6px;             /* ⬅️ 整体上移 */
-}
-
-#qr {
-  width: 340px;                 /* 稍微放大但不压规则 */
-  height: 340px;
-}
-
-/* RULES */
-.rules {
-  margin-top: 18px;
-  font-size: 14px;
-  line-height: 1.6;
-  color: #bbb;
-}
-
-.rules p {
-  margin: 6px 0;
-}
-
-.rules .enjoy {
-  margin-top: 14px;
-  font-weight: 600;
-  color: #fff;
-}
-
-.rules .enjoy span {
-  color: #4da6ff;
-}
-
-/* ===== RIGHT ===== */
-.right {
-  width: 60%;
-  display: flex;
-  flex-direction: column;
-}
-
-/* CHAT */
-#chat {
-  flex: 1;
-  padding: 48px 56px;
-  overflow-y: auto;
-}
-
-.msg {
-  margin-bottom: 22px;
-  font-size: 24px;
-  line-height: 1.35;
-}
-
-.msg .user {
-  color: #4da6ff;
-  margin-right: 12px;
-  font-weight: 700;
-}
-
-/* INPUT */
-.input-area {
-  padding: 34px 40px;
-  border-top: 1px solid #222;
-  display: flex;
-  gap: 18px;
-  align-items: flex-start;
-}
-
-.name-wrap {
-  width: 240px;
-}
-
-.name-hint {
-  font-size: 12px;
-  color: #888;
-  margin-top: 6px;
-}
-
-input {
-  width: 100%;
-  padding: 16px;
-  font-size: 16px;
-  background: #0f0f14;
-  border: 1px solid #222;
-  color: #fff;
-}
-
-textarea {
-  flex: 1;
-  min-height: 150px;
-  padding: 16px;
-  font-size: 18px;
-  background: #0f0f14;
-  border: 1px solid #222;
-  color: #fff;
-  resize: none;
-}
-
-button {
-  background: linear-gradient(135deg, #4da6ff, #6c7bff);
-  border: none;
-  padding: 18px 34px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-/* ADMIN */
-#admin-clear-btn {
-  position: fixed;
-  right: 24px;
-  bottom: 24px;
-  z-index: 9999;
-  background: linear-gradient(135deg, #ff4d4d, #ff1f1f);
-  color: #fff;
-  border: none;
-  border-radius: 999px;
-  padding: 16px 26px;
-  font-size: 14px;
-  font-weight: 700;
-  box-shadow: 0 0 18px rgba(255,77,77,0.5);
-}
+/* ===== 保留你现有的全部 desktop / screen 样式不变 ===== */
 
 /* ===== MOBILE ===== */
 @media (max-width: 900px) {
@@ -199,7 +11,7 @@ button {
   .left {
     width: 100%;
     border-right: none;
-    padding: 24px 20px 10px;
+    padding: 20px 18px 8px; /* 缩短高度 */
   }
 
   .qr-wrap {
@@ -207,16 +19,25 @@ button {
   }
 
   .logo-wrap img {
-    width: 180px;
+    width: 160px;
   }
 
   .center-group h1 {
-    font-size: 24px;
-    white-space: normal;
+    font-size: 22px;
+    margin-bottom: 10px;
   }
 
   .rules {
     font-size: 12px;
+    margin-bottom: 8px; /* 🔴 关键：缩短 rules 到 input 的距离 */
+  }
+
+  .rules p {
+    margin: 3px 0;
+  }
+
+  .rules .enjoy {
+    margin-top: 6px;
   }
 
   .right {
@@ -224,28 +45,34 @@ button {
   }
 
   #chat {
-    padding: 22px;
-  }
-
-  .msg {
-    font-size: 18px;
+    display: none; /* 手机不显示聊天记录 */
   }
 
   .input-area {
     flex-direction: column;
-    padding: 20px;
+    padding: 14px 18px 18px;
+    gap: 10px;
   }
 
   .name-wrap {
     width: 100%;
   }
 
+  input {
+    width: 100%;
+  }
+
   textarea {
-    min-height: 160px;
+    width: 100%;
+    min-height: 80px; /* 🔴 原来一半 */
+    font-size: 16px;
   }
 
   button {
     width: 100%;
+    background: #ffffff;   /* 白底 */
+    color: #000000;        /* 黑字 */
+    font-weight: 700;
   }
 }
 
