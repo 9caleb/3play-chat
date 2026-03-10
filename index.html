@@ -84,7 +84,7 @@ START CHATTING NOW
 
 const params = new URLSearchParams(window.location.search)
 
-if(params.get("admin")==="1"){
+if(params.has("admin")){
 
 document.getElementById("title").innerText="ADMIN CONTROL PANEL"
 
