@@ -218,3 +218,10 @@ color:#000;
 }
 
 }
+body.screen .rules{
+display:none;
+}
+
+body.admin .rules{
+display:none;
+}
