@@ -1,4 +1,4 @@
-body {
+kbody {
   margin: 0;
   background: radial-gradient(circle at top, #0e0e14 0%, #050508 65%);
   color: #fff;
@@ -40,13 +40,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-top: -26px;   /* 🔼 screen 再上 */
+  margin-top: -26px;
 }
 
 .qr-wrap {
   display: flex;
   justify-content: center;
-  margin-top: -18px;   /* 🔼 QR 再上 */
+  margin-top: -18px;
 }
 
 #qr {
@@ -147,7 +147,7 @@ button {
 /* ===== ADMIN ONLY ===== */
 body.admin .rules,
 body.admin .name-hint {
-  display: none;   /* ❌ admin 不要规则 & 提示 */
+  display: none;
 }
 
 /* ===== MOBILE ===== */
@@ -220,3 +220,16 @@ body.screen #qr {
   display: block !important;
 }
 
+/* ===== GAMING FONT ===== */
+.pixel-font {
+  font-family: 'Press Start 2P', cursive;
+}
+
+/* ===== ADMIN NOTICE ===== */
+.admin-notice {
+  margin-top: 20px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #bbb;
+  text-align: left;
+}

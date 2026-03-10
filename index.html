@@ -5,55 +5,92 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>3PLAY Live Chat</title>
   <link rel="stylesheet" href="style.css">
+
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
 
 <div class="layout">
 
+  <!-- LEFT -->
   <div class="left">
+
+    <!-- LOGO -->
     <div class="logo-wrap">
       <img src="3PLAY logo design.png" alt="3PLAY Logo">
     </div>
 
+    <!-- HERO -->
     <div class="center-group">
-      <h1>START CHATTING NOW</h1>
-      <div class="qr-wrap">
+
+      <h1 id="hero-title" style="
+        font-size:26px;
+        white-space:nowrap;
+        margin-bottom:10px;
+        font-family:'Press Start 2P', cursive;
+      ">
+        START CHATTING NOW
+      </h1>
+
+      <div class="qr-wrap" style="margin-top:-8px;">
         <canvas id="qr"></canvas>
       </div>
+
     </div>
 
-    <div class="rules">
-      <p>🪪 Name can be entered once only</p>
-      <p>🤝 Be respectful</p>
-      <p>🚫 No spamming</p>
-      <p class="enjoy">🎉 Enjoy the party! <span>#PLAYwithme</span></p>
-    </div>
   </div>
 
+  <!-- RIGHT -->
   <div class="right">
+
     <div id="chat"></div>
 
     <div class="input-area">
       <div class="name-wrap">
         <input id="name" placeholder="Enter your name (one time only)">
-        <div class="name-hint">
-          Name can only be set once<br>
-          You can only send a message every 15 seconds
-        </div>
+        <div class="name-hint">Name can only be set once</div>
+        <div class="name-hint">You can only send a message every 15 seconds</div>
       </div>
 
       <textarea id="message" placeholder="Type your message"></textarea>
       <button onclick="sendMessage()">SEND</button>
     </div>
+
   </div>
 
 </div>
+
+<button id="admin-clear-btn" onclick="clearChat()">CLEAR ALL</button>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
 <script src="app.js"></script>
 
+<script>
+
+const params = new URLSearchParams(window.location.search)
+
+if (!params.has("admin")) {
+  document.getElementById("admin-clear-btn").style.display = "none";
+}
+
+if (params.has("admin")) {
+  document.getElementById("hero-title").innerText = "ADMIN CONTROL PANEL"
+
+  const notice = document.createElement("div")
+  notice.className = "admin-notice"
+  notice.innerHTML = `
+  ⚠️ NOTICE:<br><br>
+  1. Immediately delete any messages containing rude or offensive words in English or Malay.<br><br>
+  2. Remove any inappropriate messages, including sexual harassment or personal insults.<br><br>
+  3. Refresh the chatbox daily to maintain proper operation.
+  `
+
+  document.querySelector(".center-group").appendChild(notice)
+}
+
+</script>
+
 </body>
 </html>
-

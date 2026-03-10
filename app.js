@@ -160,7 +160,7 @@ messagesRef.limitToLast(100).on("child_added", snap => {
   var color = getUserColor(d.name);
 
   var row = document.createElement("div");
-  row.className = "msg";
+  row.className = "msg pixel-font";
   row.dataset.key = key;
 
   row.innerHTML =
@@ -181,4 +181,3 @@ messagesRef.on("child_removed", snap => {
   var el = document.querySelector(".msg[data-key='" + snap.key + "']");
   if (el) el.remove();
 });
-
