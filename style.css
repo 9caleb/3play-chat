@@ -233,3 +233,19 @@ body.screen #qr {
   color: #bbb;
   text-align: left;
 }
+.pixel-font{
+  font-family:'Press Start 2P', cursive;
+}
+
+.admin-notice{
+  margin-top:20px;
+  font-size:13px;
+  line-height:1.5;
+  color:#bbb;
+  text-align:left;
+}
+
+/* clear only admin */
+body.screen #admin-clear-btn{
+  display:none;
+}

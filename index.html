@@ -6,6 +6,7 @@
   <title>3PLAY Live Chat</title>
   <link rel="stylesheet" href="style.css">
 
+  <!-- gaming font -->
   <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
 </head>
 <body>
@@ -23,10 +24,10 @@
     <!-- HERO -->
     <div class="center-group">
 
-      <h1 id="hero-title" style="
-        font-size:26px;
+      <h1 style="
+        font-size:20px;
         white-space:nowrap;
-        margin-bottom:10px;
+        margin-bottom:18px;
         font-family:'Press Start 2P', cursive;
       ">
         START CHATTING NOW
@@ -35,7 +36,15 @@
       <div class="qr-wrap" style="margin-top:-8px;">
         <canvas id="qr"></canvas>
       </div>
+    </div>
 
+    <!-- RULES（恢复原本） -->
+    <div class="rules">
+      <p>🪪 Your name can be entered once only and cannot be changed</p>
+      <p>🤝 Be respectful. No rude or offensive words</p>
+      <p>🚫 No spamming</p>
+      <p>📺 Messages appear live on screen</p>
+      <p class="enjoy">🎉 Enjoy the party! <span>#PLAYwithme</span></p>
     </div>
 
   </div>
@@ -60,7 +69,7 @@
 
 </div>
 
-<button id="admin-clear-btn" onclick="clearChat()">CLEAR ALL</button>
+<button id="admin-clear-btn" onclick="clearAllMessages()">CLEAR ALL</button>
 
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
@@ -76,16 +85,18 @@ if (!params.has("admin")) {
 }
 
 if (params.has("admin")) {
-  document.getElementById("hero-title").innerText = "ADMIN CONTROL PANEL"
+
+  document.querySelector("h1").innerText = "ADMIN CONTROL PANEL"
 
   const notice = document.createElement("div")
   notice.className = "admin-notice"
+
   notice.innerHTML = `
-  ⚠️ NOTICE:<br><br>
-  1. Immediately delete any messages containing rude or offensive words in English or Malay.<br><br>
-  2. Remove any inappropriate messages, including sexual harassment or personal insults.<br><br>
-  3. Refresh the chatbox daily to maintain proper operation.
-  `
+⚠️ NOTICE:<br><br>
+1. Immediately delete any messages containing rude or offensive words in English or Malay.<br><br>
+2. Remove any inappropriate messages, including sexual harassment or personal insults.<br><br>
+3. Refresh the chatbox daily.
+`
 
   document.querySelector(".center-group").appendChild(notice)
 }
