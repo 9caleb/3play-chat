@@ -15,12 +15,12 @@
 <div class="left">
 
 <div class="logo-wrap">
-<img src="3PLAY logo design.png" alt="3PLAY Logo">
+<img src="3PLAY logo design.png">
 </div>
 
 <div class="center-group">
 
-<h1 id="hero-title" style="
+<h1 id="title" style="
 font-size:20px;
 white-space:nowrap;
 margin-bottom:18px;
@@ -31,6 +31,13 @@ START CHATTING NOW
 
 <div class="qr-wrap">
 <canvas id="qr"></canvas>
+</div>
+
+<div id="notice" class="admin-notice" style="display:none">
+⚠️ NOTICE:<br><br>
+1. Immediately delete rude words (English or Malay).<br><br>
+2. Delete inappropriate messages including sexual harassment or personal insults.<br><br>
+3. Refresh the chatbox daily.
 </div>
 
 </div>
@@ -78,24 +85,13 @@ START CHATTING NOW
 
 const params = new URLSearchParams(window.location.search)
 
-if(params.has("admin")){
+if(params.get("admin") === "1"){
 
-document.body.classList.add("admin")
+document.getElementById("title").innerText="ADMIN CONTROL PANEL"
 
-document.getElementById("hero-title").innerText="ADMIN CONTROL PANEL"
+document.getElementById("notice").style.display="block"
 
-const notice=document.createElement("div")
-
-notice.className="admin-notice"
-
-notice.innerHTML=`
-⚠️ NOTICE:<br><br>
-1. Immediately delete any messages containing rude or offensive words in English or Malay.<br><br>
-2. Remove any inappropriate messages, including sexual harassment or personal insults.<br><br>
-3. Refresh the chatbox daily.
-`
-
-document.querySelector(".center-group").appendChild(notice)
+document.querySelector(".rules").style.display="none"
 
 }
 
