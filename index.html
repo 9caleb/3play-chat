@@ -35,8 +35,8 @@ START CHATTING NOW
 
 <div id="notice" class="admin-notice" style="display:none">
 ⚠️ NOTICE:<br><br>
-1. Immediately delete rude words (English or Malay).<br><br>
-2. Delete inappropriate messages including sexual harassment or personal insults.<br><br>
+1. Immediately delete rude or offensive messages in English or Malay.<br><br>
+2. Remove inappropriate messages including sexual harassment or personal insults.<br><br>
 3. Refresh the chatbox daily.
 </div>
 
@@ -75,7 +75,6 @@ START CHATTING NOW
 
 </div>
 
-
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
@@ -85,7 +84,7 @@ START CHATTING NOW
 
 const params = new URLSearchParams(window.location.search)
 
-if(params.get("admin") === "1"){
+if(params.get("admin")==="1"){
 
 document.getElementById("title").innerText="ADMIN CONTROL PANEL"
 
