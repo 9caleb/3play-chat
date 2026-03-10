@@ -225,3 +225,25 @@ display:none;
 body.admin .rules{
 display:none;
 }
+/* ADMIN MODE */
+
+body.admin .rules{
+display:none;
+}
+
+body.admin #title{
+font-size:20px;
+font-family:'Press Start 2P', cursive;
+}
+
+body.admin #title::before{
+content:"ADMIN CONTROL PANEL";
+}
+
+body.admin #title{
+color:transparent;
+}
+
+body.admin #notice{
+display:block !important;
+}
