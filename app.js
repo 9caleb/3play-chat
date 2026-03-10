@@ -10,7 +10,7 @@ var messagesRef=db.ref("messages");
 
 var params=new URLSearchParams(window.location.search);
 var isScreen=params.has("screen");
-var isAdmin=params.has("admin");
+var isAdmin=window.location.search.includes("admin");
 
 if(isScreen)document.body.classList.add("screen");
 if(isAdmin)document.body.classList.add("admin");
