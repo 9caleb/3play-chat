@@ -4,8 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>3PLAY Live Chat</title>
+
 <link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+
 </head>
 
 <body>
@@ -15,7 +17,7 @@
 <div class="left">
 
 <div class="logo-wrap">
-<img src="3PLAY logo design.png">
+<img src="3PLAY logo design.png" alt="3PLAY Logo">
 </div>
 
 <div class="center-group">
@@ -34,20 +36,31 @@ START CHATTING NOW
 </div>
 
 <div id="notice" class="admin-notice" style="display:none">
+
 ⚠️ NOTICE:<br><br>
-1. Immediately delete rude or offensive messages in English or Malay.<br><br>
-2. Remove inappropriate messages including sexual harassment or personal insults.<br><br>
+
+1. Immediately delete any messages containing rude or offensive words in English or Malay.<br><br>
+
+2. Remove any inappropriate messages including sexual harassment or personal insults.<br><br>
+
 3. Refresh the chatbox daily.
+
 </div>
 
 </div>
 
 <div class="rules">
+
 <p>🪪 Your name can be entered once only and cannot be changed</p>
+
 <p>🤝 Be respectful. No rude or offensive words</p>
+
 <p>🚫 No spamming</p>
+
 <p>📺 Messages appear live on screen</p>
+
 <p class="enjoy">🎉 Enjoy the party! <span>#PLAYwithme</span></p>
+
 </div>
 
 </div>
@@ -60,9 +73,13 @@ START CHATTING NOW
 <div class="input-area">
 
 <div class="name-wrap">
+
 <input id="name" placeholder="Enter your name (one time only)">
+
 <div class="name-hint">Name can only be set once</div>
+
 <div class="name-hint">You can only send a message every 15 seconds</div>
+
 </div>
 
 <textarea id="message" placeholder="Type your message"></textarea>
@@ -75,10 +92,13 @@ START CHATTING NOW
 
 </div>
 
+
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+
 <script src="app.js"></script>
+
 
 <script>
 
@@ -86,15 +106,18 @@ const params = new URLSearchParams(window.location.search)
 
 if(params.has("admin")){
 
-document.getElementById("title").innerText="ADMIN CONTROL PANEL"
+document.body.classList.add("admin")
 
-document.getElementById("notice").style.display="block"
+document.getElementById("title").innerText = "ADMIN CONTROL PANEL"
 
-document.querySelector(".rules").style.display="none"
+document.getElementById("notice").style.display = "block"
+
+document.querySelector(".rules").style.display = "none"
 
 }
 
 </script>
+
 
 </body>
 </html>
