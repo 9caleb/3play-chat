@@ -21,7 +21,12 @@
 
 <div class="center-group">
 
-<h1 class="hero-title">
+<h1 id="hero-title" style="
+font-size:20px;
+white-space:nowrap;
+margin-bottom:18px;
+font-family:'Press Start 2P', cursive;
+">
 START CHATTING NOW
 </h1>
 
@@ -75,15 +80,15 @@ START CHATTING NOW
 
 const params = new URLSearchParams(window.location.search)
 
-if (params.has("admin")) {
+if(params.has("admin")){
 
-document.querySelector(".hero-title").innerText = "ADMIN CONTROL PANEL"
+document.getElementById("hero-title").innerText="ADMIN CONTROL PANEL"
 
-const notice = document.createElement("div")
+const notice=document.createElement("div")
 
-notice.className = "admin-notice"
+notice.className="admin-notice"
 
-notice.innerHTML = `
+notice.innerHTML=`
 ⚠️ NOTICE:<br><br>
 1. Immediately delete any messages containing rude or offensive words in English or Malay.<br><br>
 2. Remove any inappropriate messages, including sexual harassment or personal insults.<br><br>
