@@ -18,7 +18,7 @@ body {
   position: relative;
 }
 
-/* LOGO */
+/* ===== LOGO ===== */
 .logo-wrap {
   display: flex;
   justify-content: center;
@@ -27,6 +27,14 @@ body {
 
 .logo-wrap img {
   width: 280px;
+  transform-style: preserve-3d;
+  animation: spin3d 10s linear infinite;
+}
+
+/* 旋转动画 */
+@keyframes spin3d {
+  from { transform: rotateY(0deg) rotateX(10deg); }
+  to   { transform: rotateY(360deg) rotateX(10deg); }
 }
 
 /* ===== START（gaming + 单行 + 居中） ===== */
@@ -282,20 +290,20 @@ body.screen .rules {
   }
 }
 
-/* ===== SCREEN 跑马（固定红框区域） ===== */
+/* ===== SCREEN 跑马（严格限制范围） ===== */
 body.screen .left {
   position: relative;
 }
 
+/* 外框 */
 body.screen .hero-text {
   position: absolute;
-
-  /* 👉 红框垂直位置（在 logo 和 QR 中间） */
   top: 180px;
 
-  /* 👉 红框左右范围 */
-  left: 60px;
-  right: 60px;
+  /* 👉 关键：固定宽度 + 居中 */
+  width: 70%;
+  left: 50%;
+  transform: translateX(-50%);
 
   overflow: hidden;
   white-space: nowrap;
@@ -312,13 +320,8 @@ body.screen .hero-text span {
   animation: marquee3 8s linear infinite;
 }
 
-/* 右 → 左 */
+/* 👉 只在这个框内移动 */
 @keyframes marquee3 {
   0%   { transform: translateX(0%); }
   100% { transform: translateX(-100%); }
-}
-
-/* ===== 强制 logo 一直旋转 ===== */
-.logo-wrap img {
-  animation: spin3d 10s linear infinite !important;
 }
