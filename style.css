@@ -219,3 +219,62 @@ body.screen .rules {
     color: #000;        /* 黑字 */
   }
 }
+/* ===== MOBILE 修正 ===== */
+@media (max-width: 900px) {
+
+  /* 去掉中间大空白 */
+  .left {
+    padding: 20px;
+  }
+
+  .center-group {
+    margin: 0;
+  }
+
+  /* START 居中 */
+  .hero-text {
+    position: static;
+    text-align: center;
+    margin: 20px 0;
+  }
+
+  /* logo 保持旋转（不要被覆盖） */
+  .logo-wrap img {
+    animation: spin3d 10s linear infinite !important;
+  }
+
+  /* 输入区往上贴 */
+  .input-area {
+    margin-top: 10px;
+  }
+
+  /* name 输入框加高 */
+  input {
+    height: 50px;
+    font-size: 16px;
+  }
+
+  /* textarea 比例 */
+  textarea {
+    min-height: 140px;
+  }
+
+  /* SEND 按钮 */
+  button {
+    height: 50px;
+    font-size: 16px;
+  }
+}
+
+/* ===== SCREEN 跑马灯 ===== */
+body.screen .hero-text {
+  position: absolute;
+  top: 220px;
+  white-space: nowrap;
+  animation: marquee 10s linear infinite;
+}
+
+@keyframes marquee {
+  0%   { transform: translateX(100%); }
+  100% { transform: translateX(-100%); }
+}
