@@ -2,7 +2,7 @@ body {
   margin: 0;
   background: radial-gradient(circle at top, #0e0e14 0%, #050508 65%);
   color: #fff;
-  font-family: Arial, Helvetica, sans-serif; /* 👉 chat 用回原始字体 */
+  font-family: 'Orbitron', Arial, sans-serif; /* gaming font */
 }
 
 .layout {
@@ -36,24 +36,23 @@ body {
   to   { transform: rotateY(360deg) rotateX(10deg); }
 }
 
-/* ===== START（你指定位置） ===== */
+/* ===== START TEXT（定位） ===== */
 .hero-text {
   position: absolute;
-  top: 200px;     /* 👉 位置 */
+  top: 260px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 32px;
-  font-weight: 900;   /* 👉 加粗 */
+  font-size: 28px;
+  font-weight: bold;
   color: #fff;
   letter-spacing: 2px;
-  z-index: 10;
 }
 
 /* QR */
 .qr-wrap {
   display: flex;
   justify-content: center;
-  margin-top: 120px;
+  margin-top: 100px;
 }
 
 #qr {
@@ -61,10 +60,11 @@ body {
   height: 360px;
 }
 
-/* ===== RULES ===== */
+/* rules */
 .rules {
   margin-top: 18px;
   font-size: 13px;
+  line-height: 1.5;
   color: #bbb;
 }
 
@@ -81,11 +81,11 @@ body {
   overflow-y: auto;
 }
 
-/* ===== CHAT 字体（回原始） ===== */
+/* ===== CHAT 字体（改成 gaming） ===== */
 .msg {
   font-size: 24px;
   margin-bottom: 18px;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Orbitron', Arial, sans-serif;
 }
 
 .msg .user {
@@ -98,6 +98,7 @@ body {
   color: #ff3b3b;
   cursor: pointer;
   margin-left: 10px;
+  font-size: 18px;
 }
 
 /* INPUT */
@@ -140,32 +141,15 @@ button {
 
 /* ===== ADMIN ===== */
 
-/* ❌ 不要 START */
+/* 隐藏 START */
 body.admin .hero-text {
   display: none;
 }
 
-/* ❌ 不要 rules */
-body.admin .rules {
-  display: none;
-}
-
-/* ❌ 不要 name hint */
-body.admin .name-hint {
-  display: none;
-}
-
-/* ===== SCREEN ===== */
-
-/* ❌ screen 不要 rules */
-body.screen .rules {
-  display: none;
-}
-
-/* ===== CLEAR 按钮（你画的位置） ===== */
+/* ===== CLEAR 按钮位置 ===== */
 .clear-btn {
   position: absolute;
-  top: 520px;   /* 👉 调到你画的框 */
+  bottom: 120px;
   left: 50px;
   padding: 18px 28px;
   border: 2px solid #ff3b3b;
@@ -200,4 +184,9 @@ body.screen .rules {
   .qr-wrap {
     display: none;
   }
+}
+
+/* ===== SCREEN ===== */
+body.screen .qr-wrap {
+  display: flex !important;
 }
