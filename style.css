@@ -282,21 +282,20 @@ body.screen .rules {
   }
 }
 
-/* ===== SCREEN 跑马（固定在 logo 和 QR 中间） ===== */
-body.screen .center-group {
+/* ===== SCREEN 跑马（固定红框区域） ===== */
+body.screen .left {
   position: relative;
 }
 
-/* 外框（限制范围） */
 body.screen .hero-text {
   position: absolute;
 
-  /* 👉 垂直位置：刚好在 logo 下方 */
-  top: 120px;
+  /* 👉 红框垂直位置（在 logo 和 QR 中间） */
+  top: 180px;
 
-  /* 👉 左右范围（你画的那两条线） */
-  left: 80px;
-  right: 80px;
+  /* 👉 红框左右范围 */
+  left: 60px;
+  right: 60px;
 
   overflow: hidden;
   white-space: nowrap;
@@ -306,15 +305,20 @@ body.screen .hero-text {
   font-size: 34px;
 }
 
-/* 真正移动的文字 */
+/* 文字移动 */
 body.screen .hero-text span {
   display: inline-block;
   padding-left: 100%;
   animation: marquee3 8s linear infinite;
 }
 
-/* 👉 从右 → 左 */
+/* 右 → 左 */
 @keyframes marquee3 {
   0%   { transform: translateX(0%); }
   100% { transform: translateX(-100%); }
+}
+
+/* ===== 强制 logo 一直旋转 ===== */
+.logo-wrap img {
+  animation: spin3d 10s linear infinite !important;
 }
