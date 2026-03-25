@@ -142,6 +142,29 @@ if (isAdmin) {
   });
 }
 
+/* ===== ADMIN NOTICE ===== */
+if (isAdmin) {
+  window.addEventListener("load", function () {
+
+    if (document.querySelector(".admin-note")) return;
+
+    var left = document.querySelector(".left");
+    if (!left) return;
+
+    var note = document.createElement("div");
+    note.className = "admin-note";
+
+    note.innerHTML = `
+⚠️ NOTICE:<br><br>
+1. Immediately delete any messages containing rude or offensive words in English or Malay.<br>
+2. Remove any inappropriate messages, including sexual harassment or personal insults.<br>
+3. Reset the chatbox daily.
+`;
+
+    left.appendChild(note);
+  });
+}
+
 /* 渲染 */
 messagesRef.limitToLast(100).on("child_added", snap => {
   var chat = document.getElementById("chat");

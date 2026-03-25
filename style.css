@@ -2,7 +2,7 @@ body {
   margin: 0;
   background: radial-gradient(circle at top, #0e0e14 0%, #050508 65%);
   color: #fff;
-  font-family: Arial, Helvetica, sans-serif; /* 👉 chat 用回原始字体 */
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 .layout {
@@ -18,35 +18,28 @@ body {
   position: relative;
 }
 
+/* LOGO */
 .logo-wrap {
   display: flex;
   justify-content: center;
   margin-bottom: 24px;
-  perspective: 1000px;
 }
 
 .logo-wrap img {
   width: 280px;
-  transform-style: preserve-3d;
-  animation: spin3d 10s linear infinite;
 }
 
-@keyframes spin3d {
-  from { transform: rotateY(0deg) rotateX(10deg); }
-  to   { transform: rotateY(360deg) rotateX(10deg); }
-}
-
-/* ===== START（你指定位置） ===== */
+/* ===== START（gaming + 单行 + 居中） ===== */
 .hero-text {
   position: absolute;
-  top: 200px;     /* 👉 位置 */
+  top: 220px;
   left: 50%;
   transform: translateX(-50%);
-  font-size: 32px;
-  font-weight: 900;   /* 👉 加粗 */
-  color: #fff;
-  letter-spacing: 2px;
-  z-index: 10;
+  font-family: 'Orbitron', Arial, sans-serif;
+  font-weight: 900;
+  font-size: 34px;
+  white-space: nowrap;   /* 👉 不换行 */
+  text-align: center;
 }
 
 /* QR */
@@ -61,7 +54,7 @@ body {
   height: 360px;
 }
 
-/* ===== RULES ===== */
+/* rules */
 .rules {
   margin-top: 18px;
   font-size: 13px;
@@ -81,7 +74,7 @@ body {
   overflow-y: auto;
 }
 
-/* ===== CHAT 字体（回原始） ===== */
+/* chat 字体 */
 .msg {
   font-size: 24px;
   margin-bottom: 18px;
@@ -89,15 +82,14 @@ body {
 }
 
 .msg .user {
-  margin-right: 10px;
   font-weight: bold;
+  margin-right: 10px;
 }
 
 /* delete */
 .del {
   color: #ff3b3b;
   cursor: pointer;
-  margin-left: 10px;
 }
 
 /* INPUT */
@@ -115,7 +107,6 @@ body {
 .name-hint {
   font-size: 12px;
   color: #aaa;
-  margin-top: 4px;
 }
 
 input, textarea {
@@ -140,39 +131,48 @@ button {
 
 /* ===== ADMIN ===== */
 
-/* ❌ 不要 START */
+/* 不要 START */
 body.admin .hero-text {
   display: none;
 }
 
-/* ❌ 不要 rules */
+/* 不要 rules */
 body.admin .rules {
   display: none;
 }
 
-/* ❌ 不要 name hint */
+/* 不要 hint */
 body.admin .name-hint {
   display: none;
 }
 
-/* ===== SCREEN ===== */
-
-/* ❌ screen 不要 rules */
-body.screen .rules {
-  display: none;
-}
-
-/* ===== CLEAR 按钮（你画的位置） ===== */
+/* ===== CLEAR（中间位置） ===== */
 .clear-btn {
   position: absolute;
-  top: 520px;   /* 👉 调到你画的框 */
-  left: 50px;
+  top: 420px;   /* 👉 中间位置 */
+  left: 50%;
+  transform: translateX(-50%);
   padding: 18px 28px;
   border: 2px solid #ff3b3b;
   color: #ff3b3b;
   background: transparent;
   font-weight: bold;
-  cursor: pointer;
+}
+
+/* ===== ADMIN NOTICE ===== */
+.admin-note {
+  position: absolute;
+  top: 200px;
+  left: 50px;
+  right: 50px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #fff;
+}
+
+/* ===== SCREEN ===== */
+body.screen .rules {
+  display: none;
 }
 
 /* ===== MOBILE ===== */
@@ -190,14 +190,32 @@ body.screen .rules {
     display: none;
   }
 
+  /* START 手机 */
   .hero-text {
     position: static;
-    transform: none;
-    text-align: center;
-    margin-top: 10px;
+    font-size: 26px;
+    margin-top: 20px;
+    white-space: nowrap;
   }
 
-  .qr-wrap {
-    display: none;
+  /* INPUT 重排 */
+  .input-area {
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .name-wrap {
+    width: 100%;
+  }
+
+  textarea {
+    min-height: 120px;
+  }
+
+  /* SEND 按钮 */
+  button {
+    width: 100%;
+    background: #fff;   /* 白底 */
+    color: #000;        /* 黑字 */
   }
 }
