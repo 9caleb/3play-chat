@@ -247,3 +247,38 @@ color:transparent;
 body.admin #notice{
 display:block !important;
 }
+
+/* ===== 字体统一（用 hero 那个） ===== */
+.hero-text {
+  font-size: 26px;
+  white-space: nowrap;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+/* chat 字体 */
+.msg {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+/* ===== admin 隐藏 START ===== */
+body.admin .hero-text {
+  display: none;
+}
+
+/* ===== index.html 字样移除 ===== */
+body::before {
+  content: none !important;
+}
+
+/* ===== CLEAR 按钮固定左边 ===== */
+.clear-btn {
+  margin-top: 40px;
+  padding: 18px 28px;
+  border: 2px solid #ff3b3b;
+  color: #ff3b3b;
+  background: transparent;
+  cursor: pointer;
+  font-weight: bold;
+}

@@ -1,5 +1,3 @@
-Index.html
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,29 +13,18 @@ Index.html
   <!-- LEFT -->
   <div class="left">
 
-    <!-- LOGO -->
     <div class="logo-wrap">
-      <img src="3PLAY logo design.png" alt="3PLAY Logo">
+      <img src="3PLAY logo design.png">
     </div>
 
-    <!-- HERO -->
     <div class="center-group">
-      <!-- 缩小字，保证一行 -->
-      <h1 style="
-        font-size:26px;
-        white-space:nowrap;
-        margin-bottom:10px;
-      ">
-        START CHATTING NOW
-      </h1>
+      <h1 class="hero-text">START CHATTING NOW</h1>
 
-      <!-- QR 往上移 -->
-      <div class="qr-wrap" style="margin-top:-8px;">
+      <div class="qr-wrap">
         <canvas id="qr"></canvas>
       </div>
     </div>
 
-    <!-- RULES（保持你原来的） -->
     <div class="rules">
       <p>🪪 Your name can be entered once only and cannot be changed</p>
       <p>🤝 Be respectful. No rude or offensive words</p>
@@ -68,17 +55,10 @@ Index.html
 
 </div>
 
-
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+
 <script defer src="app.js"></script>
-
-<script>
-  if (!new URLSearchParams(window.location.search).has("admin")) {
-    document.getElementById("admin-clear-btn").style.display = "none";
-  }
-</script>
-
 </body>
 </html>
