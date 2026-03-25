@@ -219,62 +219,86 @@ body.screen .rules {
     color: #000;        /* 黑字 */
   }
 }
+
 /* ===== MOBILE 修正 ===== */
 @media (max-width: 900px) {
 
-  /* 去掉中间大空白 */
-  .left {
-    padding: 20px;
-  }
-
-  .center-group {
+  /* ❌ 完全移除 QR 占位 */
+  .qr-wrap {
+    display: none !important;
+    height: 0;
     margin: 0;
   }
 
-  /* START 居中 */
+  /* ❌ center-group 不要撑高度 */
+  .center-group {
+    margin: 0;
+    padding: 0;
+  }
+
+  /* ✅ START 真正居中 */
   .hero-text {
     position: static;
     text-align: center;
-    margin: 20px 0;
+    margin: 10px 0 20px 0;
+    width: 100%;
+    display: block;
   }
 
-  /* logo 保持旋转（不要被覆盖） */
-  .logo-wrap img {
-    animation: spin3d 10s linear infinite !important;
+  /* ❌ rules 压紧 */
+  .rules {
+    margin: 10px 0;
   }
 
-  /* 输入区往上贴 */
+  /* ❌ 输入区贴上去 */
   .input-area {
-    margin-top: 10px;
+    margin-top: 0;
   }
 
-  /* name 输入框加高 */
+  /* 输入框比例 */
   input {
     height: 50px;
     font-size: 16px;
   }
 
-  /* textarea 比例 */
   textarea {
     min-height: 140px;
   }
 
-  /* SEND 按钮 */
+  /* SEND */
   button {
     height: 50px;
     font-size: 16px;
+    width: 100%;
+    background: #fff;
+    color: #000;
+  }
+
+  /* logo 保持旋转 */
+  .logo-wrap img {
+    animation: spin3d 10s linear infinite !important;
   }
 }
 
-/* ===== SCREEN 跑马灯 ===== */
+/* ===== SCREEN 跑马（从左出现 → 右消失） ===== */
 body.screen .hero-text {
   position: absolute;
   top: 220px;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
   white-space: nowrap;
-  animation: marquee 10s linear infinite;
 }
 
-@keyframes marquee {
-  0%   { transform: translateX(100%); }
-  100% { transform: translateX(-100%); }
+body.screen .hero-text::span {
+  display: inline-block;
+}
+
+body.screen .hero-text {
+  animation: marquee2 8s linear infinite;
+}
+
+@keyframes marquee2 {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
 }
