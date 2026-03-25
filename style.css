@@ -298,9 +298,9 @@ body.screen .left {
 /* 外框 */
 body.screen .hero-text {
   position: absolute;
-  top: 180px;
 
-  /* 👉 关键：固定宽度 + 居中 */
+  top: 210px;       /* 👈 往下移一点（你图那个位置） */
+
   width: 70%;
   left: 50%;
   transform: translateX(-50%);
@@ -310,7 +310,8 @@ body.screen .hero-text {
 
   font-family: 'Orbitron', Arial, sans-serif;
   font-weight: 900;
-  font-size: 34px;
+
+  font-size: 42px;  /* 👈 字体放大 */
 }
 
 /* 文字移动 */
