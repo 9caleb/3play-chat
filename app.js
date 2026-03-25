@@ -118,9 +118,13 @@ function deleteMessage(key){
   messagesRef.child(key).remove();
 }
 
-/* ===== 左侧 CLEAR 按钮 ===== */
+/* ===== CLEAR 按钮（固定位置） ===== */
 if (isAdmin) {
   window.addEventListener("load", function () {
+
+    // 防止重复生成
+    if (document.querySelector(".clear-btn")) return;
+
     var left = document.querySelector(".left");
     if (!left) return;
 

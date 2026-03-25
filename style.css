@@ -1,284 +1,192 @@
-body{
-margin:0;
-background:#000;
-background:radial-gradient(circle at top,#0e0e14 0%,#050508 65%);
-color:#fff;
-font-family:Arial,Helvetica,sans-serif;
+body {
+  margin: 0;
+  background: radial-gradient(circle at top, #0e0e14 0%, #050508 65%);
+  color: #fff;
+  font-family: 'Orbitron', Arial, sans-serif; /* gaming font */
 }
 
-.layout{
-display:flex;
-height:100vh;
+.layout {
+  display: flex;
+  height: 100vh;
 }
 
-.left{
-width:40%;
-padding:40px 60px 40px 50px;
-border-right:1px solid #222;
+/* LEFT */
+.left {
+  width: 40%;
+  padding: 40px 60px 40px 50px;
+  border-right: 1px solid #222;
+  position: relative;
 }
 
-.logo-wrap{
-display:flex;
-justify-content:center;
-margin-bottom:24px;
-perspective:1000px;
+.logo-wrap {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 24px;
+  perspective: 1000px;
 }
 
-.logo-wrap img{
-width:280px;
-transform-style:preserve-3d;
-animation:spin3d 10s linear infinite;
+.logo-wrap img {
+  width: 280px;
+  transform-style: preserve-3d;
+  animation: spin3d 10s linear infinite;
 }
 
-@keyframes spin3d{
-from{transform:rotateY(0deg) rotateX(10deg);}
-to{transform:rotateY(360deg) rotateX(10deg);}
+@keyframes spin3d {
+  from { transform: rotateY(0deg) rotateX(10deg); }
+  to   { transform: rotateY(360deg) rotateX(10deg); }
 }
 
-.center-group{
-display:flex;
-flex-direction:column;
-align-items:center;
-margin-top:-26px;
-}
-
-.hero-title{
-font-size:20px;
-white-space:nowrap;
-margin-bottom:18px;
-font-family:'Press Start 2P',cursive;
-}
-
-.qr-wrap{
-display:flex;
-justify-content:center;
-margin-top:-8px;
-}
-
-#qr{
-width:360px;
-height:360px;
-}
-
-.rules{
-margin-top:18px;
-font-size:13px;
-line-height:1.5;
-color:#bbb;
-}
-
-.rules .enjoy{
-margin-top:10px;
-color:#fff;
-}
-
-.right{
-width:60%;
-display:flex;
-flex-direction:column;
-}
-
-#chat{
-flex:1;
-padding:50px 60px;
-overflow-y:auto;
-}
-
-.msg{
-font-size:24px;
-margin-bottom:18px;
-font-family:'Press Start 2P',cursive;
-}
-
-.msg .user{
-color:#4da6ff;
-margin-right:10px;
-font-weight:bold;
-}
-
-.del{
-color:#ff3b3b;
-cursor:pointer;
-margin-left:10px;
-font-size:18px;
-}
-
-.input-area{
-padding:24px 40px;
-border-top:1px solid #222;
-display:flex;
-gap:16px;
-}
-
-.name-wrap{
-width:240px;
-}
-
-.name-hint{
-font-size:12px;
-color:#aaa;
-margin-top:4px;
-white-space:nowrap;
-}
-
-input{
-width:100%;
-padding:14px;
-background:#0f0f14;
-border:1px solid #222;
-color:#fff;
-}
-
-textarea{
-flex:1;
-min-height:150px;
-padding:14px;
-background:#0f0f14;
-border:1px solid #222;
-color:#fff;
-resize:none;
-}
-
-button{
-background:linear-gradient(135deg,#4da6ff,#6c7bff);
-border:none;
-padding:16px 30px;
-font-weight:bold;
-cursor:pointer;
-}
-
-body.screen .rules{
-display:none;
-}
-
-.admin-notice{
-margin-top:20px;
-font-size:13px;
-line-height:1.5;
-color:#bbb;
-text-align:left;
-}
-
-@media(max-width:900px){
-
-.layout{
-flex-direction:column;
-height:100vh;
-}
-
-.left{
-width:100%;
-padding:20px;
-border-right:none;
-}
-
-.logo-wrap img{
-width:160px;
-}
-
-.hero-title{
-font-size:16px;
-}
-
-.qr-wrap{
-display:none;
-}
-
-.rules{
-font-size:12px;
-margin-bottom:10px;
-}
-
-.right{
-width:100%;
-}
-
-#chat{
-display:none;
-}
-
-.input-area{
-flex-direction:column;
-padding:16px;
-gap:10px;
-}
-
-.name-wrap{
-width:100%;
-}
-
-textarea{
-min-height:80px;
-}
-
-button{
-width:100%;
-background:#fff;
-color:#000;
-}
-
-}
-body.screen .rules{
-display:none;
-}
-
-body.admin .rules{
-display:none;
-}
-/* ADMIN MODE */
-
-body.admin .rules{
-display:none;
-}
-
-body.admin #title{
-font-size:20px;
-font-family:'Press Start 2P', cursive;
-}
-
-body.admin #title::before{
-content:"ADMIN CONTROL PANEL";
-}
-
-body.admin #title{
-color:transparent;
-}
-
-body.admin #notice{
-display:block !important;
-}
-
-/* ===== 字体统一（用 hero 那个） ===== */
+/* ===== START TEXT（定位） ===== */
 .hero-text {
-  font-size: 26px;
-  white-space: nowrap;
-  margin-bottom: 10px;
+  position: absolute;
+  top: 260px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 28px;
   font-weight: bold;
+  color: #fff;
+  letter-spacing: 2px;
 }
 
-/* chat 字体 */
+/* QR */
+.qr-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 100px;
+}
+
+#qr {
+  width: 360px;
+  height: 360px;
+}
+
+/* rules */
+.rules {
+  margin-top: 18px;
+  font-size: 13px;
+  line-height: 1.5;
+  color: #bbb;
+}
+
+/* RIGHT */
+.right {
+  width: 60%;
+  display: flex;
+  flex-direction: column;
+}
+
+#chat {
+  flex: 1;
+  padding: 50px 60px;
+  overflow-y: auto;
+}
+
+/* ===== CHAT 字体（改成 gaming） ===== */
 .msg {
   font-size: 24px;
+  margin-bottom: 18px;
+  font-family: 'Orbitron', Arial, sans-serif;
+}
+
+.msg .user {
+  margin-right: 10px;
   font-weight: bold;
 }
 
-/* ===== admin 隐藏 START ===== */
+/* delete */
+.del {
+  color: #ff3b3b;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 18px;
+}
+
+/* INPUT */
+.input-area {
+  padding: 24px 40px;
+  border-top: 1px solid #222;
+  display: flex;
+  gap: 16px;
+}
+
+.name-wrap {
+  width: 240px;
+}
+
+.name-hint {
+  font-size: 12px;
+  color: #aaa;
+  margin-top: 4px;
+}
+
+input, textarea {
+  background: #0f0f14;
+  border: 1px solid #222;
+  color: #fff;
+}
+
+textarea {
+  flex: 1;
+  min-height: 150px;
+  padding: 14px;
+}
+
+button {
+  background: linear-gradient(135deg, #4da6ff, #6c7bff);
+  border: none;
+  padding: 16px 30px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+/* ===== ADMIN ===== */
+
+/* 隐藏 START */
 body.admin .hero-text {
   display: none;
 }
 
-/* ===== index.html 字样移除 ===== */
-body::before {
-  content: none !important;
-}
-
-/* ===== CLEAR 按钮固定左边 ===== */
+/* ===== CLEAR 按钮位置 ===== */
 .clear-btn {
-  margin-top: 40px;
+  position: absolute;
+  bottom: 120px;
+  left: 50px;
   padding: 18px 28px;
   border: 2px solid #ff3b3b;
   color: #ff3b3b;
   background: transparent;
-  cursor: pointer;
   font-weight: bold;
+  cursor: pointer;
+}
+
+/* ===== MOBILE ===== */
+@media (max-width: 900px) {
+
+  .layout {
+    flex-direction: column;
+  }
+
+  .left, .right {
+    width: 100%;
+  }
+
+  #chat {
+    display: none;
+  }
+
+  .hero-text {
+    position: static;
+    transform: none;
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  .qr-wrap {
+    display: none;
+  }
+}
+
+/* ===== SCREEN ===== */
+body.screen .qr-wrap {
+  display: flex !important;
 }
